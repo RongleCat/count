@@ -1,0 +1,15 @@
+<view class="page">
+    <view class="tab-bar">
+        <view class="tab-item {{index==tabSelect?'active':''}}" wx:for="{{tabList}}" wx:key="*this" data-index="{{index}}" bindtap="changeTab">
+            {{item}}
+        </view>
+    </view>
+    <scroll-view scroll-y="true" class="order-list">
+        <view class="order-item" wx:for="{{list}}" wx:key="*this" >{{item}}</view>
+        <view class="mb"></view>
+    </scroll-view>
+    <view class="btn-create">
+        <navigator url="../help/help" hover-class="active">帮助</navigator>
+        <navigator url="../create/create" hover-class="active">新建拼团</navigator>
+    </view>
+</view>

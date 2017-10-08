@@ -1,0 +1,7 @@
+{
+    "less.compile": {
+        "compress": false, // true => remove surplus whitespace
+        "sourceMap": false,
+        "autoprefixer": "last 2 Chrome versions"
+    }
+}

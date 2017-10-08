@@ -1,0 +1,101 @@
+/* pages/index/index.wxss */
+.page {
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  padding-top: 90rpx;
+  padding-bottom: 90rpx;
+  position: relative;
+}
+.page,
+.page view,
+.page block,
+.page scroll-view,
+.page image {
+  box-sizing: border-box;
+}
+.page .tab-bar {
+  height: 90rpx;
+  width: 100%;
+  background: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-bottom: 1rpx solid #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+.page .tab-bar .tab-item {
+  flex: 1;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 30rpx;
+  position: relative;
+  color: #999;
+  transition: color .2s;
+}
+.page .tab-bar .tab-item:after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 4rpx;
+  bottom: -1rpx;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: #26c6da;
+  opacity: 0;
+  transition: opacity .2s;
+}
+.page .tab-bar .tab-item.active {
+  color: #333;
+}
+.page .tab-bar .tab-item.active:after {
+  opacity: 1;
+}
+.page .btn-create {
+  position: absolute;
+  height: 90rpx;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  display: flex;
+}
+.page .btn-create navigator {
+  text-align: center;
+  line-height: 90rpx;
+  color: #fff;
+  transition: opacity .2s;
+}
+.page .btn-create navigator.active {
+  opacity: .8;
+}
+.page .btn-create navigator:first-child {
+  flex: 1;
+  background: #91a8d2;
+}
+.page .btn-create navigator:last-child {
+  flex: 5;
+  background-image: linear-gradient(to right, #26c6da 0%, #1cd9fe 100%);
+}
+.order-list {
+  height: 100%;
+  background: #f0f0f0;
+}
+.order-list .order-item {
+  width: 710rpx;
+  height: 200rpx;
+  border-radius: 20rpx;
+  margin-top: 20rpx;
+  margin-left: 20rpx;
+  padding: 20rpx;
+  box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.1);
+  color: #333;
+  background: #fff;
+}
+.order-list .mb {
+  height: 1rpx;
+  margin-top: 19rpx;
+}

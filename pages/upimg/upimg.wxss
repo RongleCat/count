@@ -1,0 +1,5 @@
+/* pages/upimg/upimg.wxss */
+.upimg{
+  height: 750rpx;
+  object-fit: contain;
+}
