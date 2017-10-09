@@ -12,8 +12,14 @@
 	"projectname": "count",
 	"condition": {
 		"weapp": {
-			"current": -1,
-			"list": []
+			"current": 0,
+			"list": [
+				{
+					"id": -1,
+					"name": "create",
+					"pathName": "pages/create/create"
+				}
+			]
 		},
 		"search": {
 			"current": -1,

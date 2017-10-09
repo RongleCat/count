@@ -1,1 +1,66 @@
-/* pages/create/create.wxss */
+.page {
+  width: 100vw;
+  height: 100vh;
+  padding-bottom: 90rpx;
+  position: relative;
+}
+.page,
+.page view,
+.page block,
+.page scroll-view,
+.page image {
+  box-sizing: border-box;
+}
+.create-form {
+  height: 100%;
+  padding: 20rpx;
+  background: #f0f0f0;
+}
+.form-block {
+  border-radius: 10rpx;
+  padding: 0 20rpx;
+  background: #fff;
+}
+.form-block view:last-child {
+  border: 0;
+}
+.form-item {
+  height: 90rpx;
+  line-height: 90rpx;
+  font-size: 26rpx;
+  color: #444;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  border-bottom: 1rpx solid #ebebeb;
+}
+.form-item label {
+  flex: 1;
+  font-weight: bold;
+}
+.form-item input {
+  flex: 4;
+  height: 90rpx;
+}
+.form-image-box {
+  width: 100%;
+  padding: 20rpx 0;
+  display: flex;
+}
+.form-image-box .image-box {
+  width: 126rpx;
+  height: 126rpx;
+  border: 1rpx solid #ebebeb;
+}
+.btn-create-sumit {
+  height: 90rpx;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  line-height: 90rpx;
+  font-size: 30rpx;
+  color: #fff;
+  background-image: linear-gradient(to right, #26c6da 0%, #1cd9fe 100%);
+}

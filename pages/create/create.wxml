@@ -1,2 +1,21 @@
-<!--pages/create/create.wxml-->
-<text>pages/create/create.wxml</text>
+<view class="page">
+    <scroll-view scroll-y="true" class="create-form">
+        <view class="form-block">
+            <view class="form-item">
+                <label for="">接龙主题：</label>
+                <input type="text" class="form-input" />
+            </view>
+            <view class="form-image-box">
+                <view class="image-box">
+
+                </view>
+                <view class="image-box add-image">
+
+                </view>
+            </view>
+        </view>
+    </scroll-view>
+    <view class="btn-create-sumit">
+        发布接龙
+    </view>
+</view>
