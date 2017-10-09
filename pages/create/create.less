@@ -22,8 +22,16 @@
     border-radius: 10rpx;
     padding: 0 20rpx;
     background: #fff;
-    view:last-child{
+    margin-bottom: 20rpx;
+    >view:last-child{
         border: 0;
+    }
+    .form-block-title{
+        line-height: 90rpx;
+        font-size: 30rpx;
+    color: #444;
+    font-weight: bold;
+        // border-bottom: 1rpx solid #ebebeb;
     }
 }
 
@@ -37,12 +45,15 @@
     justify-content: center;
     border-bottom: 1rpx solid #ebebeb;
     label{
-        flex: 1;
+        flex: 1.2;
         font-weight: bold;
     }
     input{
         flex: 4;
-        height: 90rpx;
+        height: 89rpx;
+    }
+    &.title{
+        font-size: 30rpx;
     }
 }
 
@@ -53,10 +64,151 @@
     .image-box{
         width: 126rpx;
         height: 126rpx;
-        border:1rpx solid #ebebeb; 
+        min-width: 126rpx;
+        margin-right: 10rpx;
+        position: relative;
+        image{
+            width: 100%;
+            height: 100%;
+        }
+        &:last-child{
+            margin-right: 0;
+        }
+    }
+    .add-image{
+        position: relative;
+        border:1rpx solid #ccc; 
+        &:before{
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 90rpx;
+            height: 4rpx;
+            content: '';
+            background: #ccc;
+            position: absolute;
+        }
+        &:after{
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 4rpx;
+            height: 90rpx;
+            content: '';
+            background: #ccc;
+            position: absolute;
+        }
+    }
+    
+    .uploading-layer{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, .4);
+        .progress-bar{
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            height: 20rpx;
+            background: #eee;
+            .complete-progress{
+                height: 100%;
+                width: 0;
+                background: #51c332;
+            }
+        }
+    }
+
+    .btn-img-delete{
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 40rpx;
+        height: 40rpx;
+        background: rgba(0, 0, 0, .4);
+        color: #fff;
+        text-align: center;
+        line-height: 40rpx;
+        border-radius:0 0 0 10rpx;
+        &:before{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            content: '';
+            width: 2rpx;
+            height: 30rpx;
+            background: #fff;
+            transform: translate(-50%,-50%) rotate(45deg);
+        }
+        
+        &:after{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            content: '';
+            width: 2rpx;
+            height: 30rpx;
+            background: #fff;
+            transform: translate(-50%,-50%) rotate(-45deg);
+        }
     }
 }
 
+.add-good-block{
+    padding: 20rpx;
+    padding-top: 0;
+    // background: #f0f0f0;
+    border: 1rpx solid #ebebeb;
+    border-radius: 20rpx;
+    view{
+        // border-color: #ccc;
+        label{
+            // flex: 1.5;
+        }
+    }
+}
+
+.btn-comfirm-good{
+    height: 80rpx;
+    width: 100%;
+    background: #51c332;
+    border-radius: 20rpx;
+    margin-top: 20rpx;
+    text-align: center;
+    line-height: 80rpx;
+    color: #fff;
+    font-size: 30rpx;
+    &:active{
+        opacity: .8;
+    }
+}
+
+.btn-add-good{
+    height: 80rpx;
+    width: 100%;
+    background: #fff;
+    border-radius: 20rpx;
+    margin-top: 20rpx;
+    text-align: center;
+    line-height: 78rpx;
+    color: #51c332;
+    font-size: 30rpx;
+    border: 1rpx solid #51c332;
+    &:active{
+        // opacity: .8;
+        background: #51c332;
+    }
+}
+
+.null-block{
+    height: 1rpx;
+    margin-top: 19rpx;
+}
 
 .btn-create-sumit{
     height: 90rpx;

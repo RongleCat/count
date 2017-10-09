@@ -1,18 +1,45 @@
 <view class="page">
     <scroll-view scroll-y="true" class="create-form">
         <view class="form-block">
-            <view class="form-item">
+            <view class="form-item title">
                 <label for="">接龙主题：</label>
-                <input type="text" class="form-input" />
+                <input type="text" class="form-input" placeholder="必填"/>
             </view>
             <view class="form-image-box">
-                <view class="image-box">
-
+                <view class="image-box" wx:for="{{viewImg}}" wx:key="*this" data-index="{{index}}">
+                    <image src="{{item}}" mode="aspectFill" bindtap="viewImage" data-src="{{item}}" />
+                    <view class="uploading-layer" wx:if="{{!jindu[index] == 0}}">
+                        <view class="progress-bar">
+                            <view class="complete-progress" style="width:{{jindu[index]}}%"></view>
+                        </view>
+                    </view>
+                    <view class="btn-img-delete" bindtap="delImage" data-index="{{index}}"></view>
                 </view>
-                <view class="image-box add-image">
-
-                </view>
+                <view class="image-box add-image" bindtap="upImage" wx:if="{{img.length<5}}"></view>
             </view>
+        </view>
+        <view class="form-block">
+            <view class="form-block-title">添加接龙商品</view>
+            <view class="goods-list" wx:if="{{goods.length!=0}}">
+                <view wx:for="{{goods}}">{{item.Name}} {{item.Price}} {{item.Count}}</view>
+            </view>
+            <view class="add-good-block" wx:if="{{goodEdit}}">
+                <view class="form-item">
+                    <label for="">商品名称：</label>
+                    <input type="text" class="form-input" value="{{goodItem.Name}}" data-param="Name" bindinput="setGoodValue" placeholder="填写商品名称" />
+                </view>
+                <view class="form-item">
+                    <label for="">商品单价：</label>
+                    <input type="digit" class="form-input" value="{{goodItem.Price}}" data-param="Price" bindinput="setGoodValue" placeholder="填写商品单价" />
+                </view>
+                <view class="form-item">
+                    <label for="">可售数量：</label>
+                    <input type="number" class="form-input" value="{{goodItem.Count}}" data-param="Count" bindinput="setGoodValue" placeholder="填写商品可售数量" />
+                </view>
+                <view class="btn-comfirm-good" bindtap="addGood">确认添加</view>
+            </view>
+            <view class="btn-add-good"  wx:if="{{!goodEdit}}" bindtap="createNewGood">新增一个商品</view>
+            <view class="null-block"></view>
         </view>
     </scroll-view>
     <view class="btn-create-sumit">

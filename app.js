@@ -3,7 +3,7 @@ const url = 'https://weapp.fmcat.top'
 App({
     onLaunch: function() {
         wx.removeStorageSync('sessionId')
-            // this.loginFun()
+            this.loginFun()
     },
     globalData: {
         userInfo: null,
