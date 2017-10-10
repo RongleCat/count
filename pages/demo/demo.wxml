@@ -1,0 +1,5 @@
+<view class="page">
+  <scroll-view class="page-content">
+    
+  </scroll-view>
+</view>

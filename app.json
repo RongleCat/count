@@ -4,7 +4,8 @@
     "pages/logs/logs",
     "pages/upimg/upimg",
     "pages/create/create",
-    "pages/help/help"
+    "pages/help/help",
+    "pages/demo/demo"
   ],
   "window": {
     "backgroundTextStyle": "light",

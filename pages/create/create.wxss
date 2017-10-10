@@ -31,6 +31,13 @@
   color: #444;
   font-weight: bold;
 }
+.form-block .form-block-tip {
+  line-height: 90rpx;
+  height: 60rpx;
+  font-size: 26rpx;
+  color: #444;
+  font-weight: bold;
+}
 .form-item {
   height: 90rpx;
   line-height: 90rpx;
@@ -46,6 +53,10 @@
   font-weight: bold;
 }
 .form-item input {
+  flex: 4;
+  height: 89rpx;
+}
+.form-item .piker-box {
   flex: 4;
   height: 89rpx;
 }
@@ -184,6 +195,7 @@
 }
 .btn-add-good:active {
   background: #51c332;
+  color: #fff;
 }
 .null-block {
   height: 1rpx;
@@ -200,4 +212,98 @@
   font-size: 30rpx;
   color: #fff;
   background-image: linear-gradient(to right, #26c6da 0%, #1cd9fe 100%);
+}
+.goods-item {
+  width: 100%;
+  height: 120rpx;
+  border: 1rpx solid #ebebeb;
+  border-radius: 20rpx;
+  margin-bottom: 10rpx;
+  padding: 20rpx;
+  padding-bottom: 0;
+  position: relative;
+  color: #444;
+}
+.goods-item .good-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  line-height: 30rpx;
+}
+.goods-item .good-info {
+  margin-top: 24rpx;
+  font-size: 26rpx;
+  line-height: 26rpx;
+}
+.goods-item .good-price {
+  color: #f66;
+}
+.btn-del-good {
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  right: 30rpx;
+  transform: translateY(-50%);
+  border: 1rpx solid #ccc;
+}
+.btn-del-good:before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  content: '';
+  width: 4rpx;
+  height: 36rpx;
+  background: #ccc;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.btn-del-good:after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  content: '';
+  width: 4rpx;
+  height: 36rpx;
+  background: #ccc;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+.btn-edit-good {
+  width: 50rpx;
+  height: 50rpx;
+  border: 1rpx solid #ccc;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  right: 110rpx;
+  transform: translateY(-50%);
+}
+.btn-edit-good .icon-edit {
+  height: 38rpx;
+  width: 8rpx;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.btn-edit-good .icon-edit span {
+  display: block;
+}
+.btn-edit-good .icon-edit .dot {
+  width: 8rpx;
+  height: 6rpx;
+  background: #ccc;
+}
+.btn-edit-good .icon-edit .pen {
+  height: 20rpx;
+  width: 8rpx;
+  background: #ccc;
+  margin-top: 2rpx;
+}
+.btn-edit-good .icon-edit .head {
+  width: 0;
+  height: 0;
+  border-left: 4rpx solid transparent;
+  border-right: 4rpx solid transparent;
+  border-top: 8rpx solid #ccc;
+  margin-top: 2rpx;
 }

@@ -3,11 +3,11 @@
         <view class="form-block">
             <view class="form-item title">
                 <label for="">接龙主题：</label>
-                <input type="text" class="form-input" placeholder="必填"/>
+                <input type="text" class="form-input" placeholder="必填" bindinput="setTitleValue" />
             </view>
             <view class="form-image-box">
                 <view class="image-box" wx:for="{{viewImg}}" wx:key="*this" data-index="{{index}}">
-                    <image src="{{item}}" mode="aspectFill" bindtap="viewImage" data-src="{{item}}" />
+                    <image src="{{item}}" mode="aspectFill" bindtap="viewImage" data-src="{{img[index]}}" />
                     <view class="uploading-layer" wx:if="{{!jindu[index] == 0}}">
                         <view class="progress-bar">
                             <view class="complete-progress" style="width:{{jindu[index]}}%"></view>
@@ -21,12 +21,21 @@
         <view class="form-block">
             <view class="form-block-title">添加接龙商品</view>
             <view class="goods-list" wx:if="{{goods.length!=0}}">
-                <view wx:for="{{goods}}">{{item.Name}} {{item.Price}} {{item.Count}}</view>
+                <view wx:for="{{goods}}" class="goods-item" wx:key="*this.Name">
+                    <view class="good-name">{{item.Name}}</view>
+                    <view class="good-info">单价：<span class="good-price">￥{{item.Price}}</span>　　数量：{{item.Count}}</view>
+                    <view class="btn-edit-good" data-index="{{index}}" bindtap="editGood">
+                        <view class="icon-edit">
+                            <span class="dot"></span><span class="pen"></span><span class="head"></span>
+                        </view>
+                    </view>
+                    <view class="btn-del-good" data-index="{{index}}" bindtap="deleteGood"></view>
+                </view>
             </view>
             <view class="add-good-block" wx:if="{{goodEdit}}">
                 <view class="form-item">
                     <label for="">商品名称：</label>
-                    <input type="text" class="form-input" value="{{goodItem.Name}}" data-param="Name" bindinput="setGoodValue" placeholder="填写商品名称" />
+                    <input type="text" class="form-input" value="{{goodItem.Name}}" data-param="Name" bindinput="setGoodValue" placeholder="填写商品名称" focus="{{editIndex!=-1}}" />
                 </view>
                 <view class="form-item">
                     <label for="">商品单价：</label>
@@ -34,11 +43,30 @@
                 </view>
                 <view class="form-item">
                     <label for="">可售数量：</label>
-                    <input type="number" class="form-input" value="{{goodItem.Count}}" data-param="Count" bindinput="setGoodValue" placeholder="填写商品可售数量" />
+                    <input type="number" class="form-input" value="{{goodItem.Count}}" data-param="Count" bindinput="setGoodValue" placeholder="不填为无上限" />
                 </view>
-                <view class="btn-comfirm-good" bindtap="addGood">确认添加</view>
+                <view class="btn-comfirm-good" bindtap="addGood">确认{{editIndex==-1?'添加':'修改'}}</view>
             </view>
-            <view class="btn-add-good"  wx:if="{{!goodEdit}}" bindtap="createNewGood">新增一个商品</view>
+            <view class="btn-add-good" wx:if="{{!goodEdit}}" bindtap="createNewGood">新增一个商品</view>
+            <view class="null-block"></view>
+        </view>
+        <view class="form-block">
+            <view class="form-item">
+                <label for="">截止时间：</label>
+                <view class="piker-box"></view>
+            </view>
+            <view class="form-item">
+                <label for="">截止人数：</label>
+                <input type="number" class="form-input" value="{{endcount}}" placeholder="选填" />
+            </view>
+            <view class="form-block-tip">报名附加信息</view>
+            <view class="form-item">
+                <checkbox-group bindchange="checkboxChange">
+                    <label class="checkbox"><checkbox value="phone" checked="{{phone}}" />手机号</label>
+                    <label class="checkbox"><checkbox value="realname" checked="{{realname}}"/>真实姓名</label>
+                    <label class="checkbox"><checkbox value="weixin" checked="{{weixin}}"/>微信号</label>
+                </checkbox-group>
+            </view>
             <view class="null-block"></view>
         </view>
     </scroll-view>

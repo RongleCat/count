@@ -17,7 +17,14 @@
 				{
 					"id": -1,
 					"name": "create",
-					"pathName": "pages/create/create"
+					"pathName": "pages/create/create",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "demo",
+					"pathName": "pages/demo/demo",
+					"query": ""
 				}
 			]
 		},
