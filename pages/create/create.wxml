@@ -61,10 +61,28 @@
             </view>
             <view class="form-block-tip">报名附加信息</view>
             <view class="form-item">
-                <checkbox-group bindchange="checkboxChange">
-                    <label class="checkbox"><checkbox value="phone" checked="{{phone}}" />手机号</label>
-                    <label class="checkbox"><checkbox value="realname" checked="{{realname}}"/>真实姓名</label>
-                    <label class="checkbox"><checkbox value="weixin" checked="{{weixin}}"/>微信号</label>
+                <checkbox-group bindchange="checkboxChange" class="check-list">
+                    <label class="checkbox"><checkbox value="phone" />手机号</label>
+                    <label class="checkbox"><checkbox value="realname" />真实姓名</label>
+                    <label class="checkbox"><checkbox value="weixin" />微信号</label>
+                </checkbox-group>
+            </view>
+        </view>
+        <view class="form-block">
+            <view class="form-item">
+                <label for="">截止时间：</label>
+                <view class="piker-box"></view>
+            </view>
+            <view class="form-item">
+                <label for="">截止人数：</label>
+                <input type="number" class="form-input" value="{{endcount}}" placeholder="选填" />
+            </view>
+            <view class="form-block-tip">报名附加信息</view>
+            <view class="form-item">
+                <checkbox-group bindchange="checkboxChange" class="check-list">
+                    <label class="checkbox"><checkbox value="phone" />手机号</label>
+                    <label class="checkbox"><checkbox value="realname" />真实姓名</label>
+                    <label class="checkbox"><checkbox value="weixin" />微信号</label>
                 </checkbox-group>
             </view>
             <view class="null-block"></view>

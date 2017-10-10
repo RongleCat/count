@@ -1,7 +1,7 @@
 // pages/create/create.js
 const url = 'https://weapp.fmcat.top'
 const util = require('../../utils/util')
-Array.prototype.remove = function(index) {
+Array.prototype.remove = function (index) {
     this.splice(index, 1);
 };
 Page({
@@ -22,63 +22,61 @@ Page({
             Count: ''
         },
         editIndex: -1,
-        phone: false,
-        realname: false,
-        weixin: false,
         region: false,
         regionname: '',
         adminpwd: '',
         managepwd: '',
         hideprice: false,
         headshowtype: 1,
-        endTime: ''
+        endTime: '',
+        info: []
     },
-    onLoad: function(options) {
+    onLoad: function (options) {
 
     },
     upImage() {
         let that = this;
         //上传图片部分代码
         let upImage = (img) => {
-                let index = that.data.viewImg.indexOf(img)
-                let uploadTask = wx.uploadFile({
-                        url: url + '/order/uploadimg', //仅为示例，非真实的接口地址
-                        filePath: img,
-                        name: 'file',
-                        formData: {
-                            sessionId: wx.getStorageSync('sessionId')
-                        },
-                        success: function(res) {
-                            let result = JSON.parse(res.data).result
-                            console.log(res)
-                            let img = that.data.img
-                            that.setData({
-                                img: [...img, result.origin]
-                            })
-                        },
-                        fail: res => {
-                            console.log(res)
-                        }
-                    })
-                    //监听上传进度并改变
-                uploadTask.onProgressUpdate((res) => {
-                    let jindu = that.data.jindu
-                    if (res.progress == 100) {
-                        jindu[index] = 0
-                    } else {
-                        jindu[index] = res.progress
-                    }
+            let index = that.data.viewImg.indexOf(img)
+            let uploadTask = wx.uploadFile({
+                url: url + '/order/uploadimg', //仅为示例，非真实的接口地址
+                filePath: img,
+                name: 'file',
+                formData: {
+                    sessionId: wx.getStorageSync('sessionId')
+                },
+                success: function (res) {
+                    let result = JSON.parse(res.data).result
+                    console.log(res)
+                    let img = that.data.img
                     that.setData({
-                        jindu: jindu
+                        img: [...img, result.origin]
                     })
+                },
+                fail: res => {
+                    console.log(res)
+                }
+            })
+            //监听上传进度并改变
+            uploadTask.onProgressUpdate((res) => {
+                let jindu = that.data.jindu
+                if (res.progress == 100) {
+                    jindu[index] = 0
+                } else {
+                    jindu[index] = res.progress
+                }
+                that.setData({
+                    jindu: jindu
                 })
-            }
-            //选择图片并调用上传接口
+            })
+        }
+        //选择图片并调用上传接口
         wx.chooseImage({
             count: 5 - that.data.img.length, // 默认9
             sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
             sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-            success: function(res) {
+            success: function (res) {
                 // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
                 let tempFilePaths = res.tempFilePaths
                 let count = tempFilePaths.length
@@ -91,7 +89,7 @@ Page({
                     viewImg: [...img, ...tempFilePaths],
                     jindu: jindu
                 })
-                tempFilePaths.forEach(function(item) {
+                tempFilePaths.forEach(function (item) {
                     upImage(item)
                 }, this);
             }
@@ -190,6 +188,8 @@ Page({
         })
     },
     checkboxChange(e) {
-        console.log(e);
+        this.setData({
+            info:e.detail.value
+        })
     }
 })
