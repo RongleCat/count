@@ -3,7 +3,7 @@
         <view class="form-block">
             <view class="form-item title">
                 <label for="">接龙主题：</label>
-                <input type="text" class="form-input" placeholder="必填" bindinput="setTitleValue" />
+                <input type="text" class="form-input" placeholder="必填" bindinput="setTitleValue" focus="{{isNull}}" />
             </view>
             <view class="form-image-box">
                 <view class="image-box" wx:for="{{viewImg}}" wx:key="*this" data-index="{{index}}">
@@ -23,7 +23,7 @@
             <view class="goods-list" wx:if="{{goods.length!=0}}">
                 <view wx:for="{{goods}}" class="goods-item" wx:key="*this.Name">
                     <view class="good-name">{{item.Name}}</view>
-                    <view class="good-info">单价：<span class="good-price">￥{{item.Price}}</span>　　数量：{{item.Count}}</view>
+                    <view class="good-info">单价：<span class="good-price">￥{{item.Price}}</span>　　数量：{{item.Count.length==0?'无限量':item.Count}}</view>
                     <view class="btn-edit-good" data-index="{{index}}" bindtap="editGood">
                         <view class="icon-edit">
                             <span class="dot"></span><span class="pen"></span><span class="head"></span>
@@ -53,7 +53,18 @@
         <view class="form-block">
             <view class="form-item">
                 <label for="">截止时间：</label>
-                <view class="piker-box"></view>
+                <view class="piker-box">
+                    <picker mode="date" value="{{endDate}}" start="{{startTime}}" bindchange="bindDateChange">
+                        <view class="picker">
+                            {{endDate==''?'选择日期':endDate}}
+                        </view>
+                    </picker>
+                    <picker mode="time" value="{{endTime}}" bindchange="bindTimeChange">
+                        <view class="picker">
+                            {{endTime==''?'选择时间':endTime}}
+                        </view>
+                    </picker>
+                </view>
             </view>
             <view class="form-item">
                 <label for="">截止人数：</label>
@@ -69,26 +80,76 @@
             </view>
         </view>
         <view class="form-block">
-            <view class="form-item">
-                <label for="">截止时间：</label>
-                <view class="piker-box"></view>
+            <view class="form-item btn-more" bindtap="openMoreOpation">
+                <label for="">更多选项</label>
+                <view class="icon-jiantou {{moreOpen?'open':''}}"></view>
             </view>
-            <view class="form-item">
-                <label for="">截止人数：</label>
-                <input type="number" class="form-input" value="{{endcount}}" placeholder="选填" />
-            </view>
-            <view class="form-block-tip">报名附加信息</view>
-            <view class="form-item">
-                <checkbox-group bindchange="checkboxChange" class="check-list">
-                    <label class="checkbox"><checkbox value="phone" />手机号</label>
-                    <label class="checkbox"><checkbox value="realname" />真实姓名</label>
-                    <label class="checkbox"><checkbox value="weixin" />微信号</label>
-                </checkbox-group>
-            </view>
-            <view class="null-block"></view>
+            <block wx:if="{{vip}}">
+                <view class="form-item">
+                    <label for="">设置地区列表</label>
+                    <switch bindchange="setRegion" checked="{{region}}" />
+                </view>
+                <view class="region-list" wx:if="{{region}}">
+                    <view class="region-item" wx:for="{{regionname}}" wx:key="*this">
+                        {{item}}
+                        <view class="btn-del-region" data-index="{{index}}" bindtap="deleteRegion"></view>
+                    </view>
+                </view>
+                <view class="region-add" wx:if="{{region}}">
+                    <view class="btn-add-good" bindtap="createNewRegion">新增一个地区</view>
+                </view>
+                <view class="form-item">
+                    <label for="">隐藏单价</label>
+                    <switch bindchange="setHidePrice" checked="{{hideprice}}" />
+                </view>
+                <view class="form-item">
+                    <label for="">接龙者头像昵称显示</label>
+                    <picker bindchange="bindPickerChange" value="{{headSelect}}" range="{{headshowmode}}" class="head-picker">
+                        <view class="picker">
+                            {{headshowmode[headSelect]}}
+                        </view>
+                    </picker>
+                </view>
+                <view class="form-item">
+                    <label for="">查看密码：</label>
+                    <input type="text" class="form-input" password="true" value="{{password.managepwd}}" data-param="managepwd" bindinput="setPassword" placeholder="填写查看密码（可选）" />
+                </view>
+                <view class="form-item">
+                    <label for="">管理密码：</label>
+                    <input type="text" class="form-input" password="true" value="{{password.adminpwd}}" data-param="adminpwd" bindinput="setPassword" placeholder="填写管理密码（可选）" />
+                </view>
+            </block>
         </view>
     </scroll-view>
-    <view class="btn-create-sumit">
+    <view class="btn-create-submit" bindtap="createSubmit">
         发布接龙
+    </view>
+    <view class="pop-container" wx:if="{{popOpen}}">
+        <view class="pop-main {{closeIng?'close':''}}">
+            <view class="pop-title">温馨提示</view>
+            <view class="pop-content">
+                <span class="font-red">使用以下功能需开通VIP，请于管理员联系（微信：111111）</span>
+                <view class="power-list">
+                    添加管理密码，添加地区列表，隐藏单价，设置接龙者头像昵称显示
+                </view>
+            </view>
+            <view class="pop-close" bindtap="closePop"></view>
+        </view>
+        <view class="pop-mask {{closeIng?'close':''}}"></view>
+    </view>
+    <view class="pop-input" wx:if="{{inputPopOpen}}">
+        <view class="pop-input-main {{closeIng?'close':''}}">
+            <view class="pop-input-title">
+                添加地区
+            </view>
+            <view class="pop-input-content">
+                <input type="text" placeholder="填写地区名称" bindinput="popInput" class="{{isNull?'isNull':''}}" />
+            </view>
+            <view class="pop-btn-box">
+                <view class="btn-cancel" bindtap="popCancel">取消</view>
+                <view class="btn-confirm" bindtap="popConfirm">确定</view>
+            </view>
+        </view>
+        <view class="pop-mask {{closeIng?'close':''}}"></view>
     </view>
 </view>
