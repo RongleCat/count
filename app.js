@@ -1,9 +1,9 @@
 //app.js
 const url = 'https://weapp.fmcat.top'
 App({
-    onLaunch: function() {
+    onLaunch: function () {
         wx.removeStorageSync('sessionId')
-            this.loginFun()
+        this.loginFun()
     },
     globalData: {
         userInfo: null,
@@ -11,8 +11,10 @@ App({
     },
     loginFun() {
         let that = this
-            // 登录
-        wx.showLoading({ title: '正在登陆...' })
+        // 登录
+        wx.showLoading({
+            title: '正在登陆...'
+        })
         wx.getSetting({
             success: res => {
                 if (res.authSetting['scope.userInfo']) {
@@ -39,12 +41,28 @@ App({
                                             console.log(r)
                                             wx.setStorageSync('sessionId', r.data.result.sessionId)
                                             wx.hideLoading()
+
+                                            wx.request({
+                                                url: url + '/Order/ManageOrder',
+                                                header: {
+                                                    'Content-Type': 'application/json'
+                                                },
+                                                data: {
+                                                    sessionId: wx.getStorageSync('sessionId'),
+                                                    orderId:'001',
+                                                    pwd:'1111111'
+                                                },
+                                                method:'POST',
+                                                success: function (res) {
+                                                    console.log(res);
+                                                }
+                                            })
                                         }
                                     })
                                 }
                             })
                         },
-                        fail: function(failData) {
+                        fail: function (failData) {
                             console.info("用户拒绝授权");
                         }
                     })

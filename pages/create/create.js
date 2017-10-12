@@ -403,10 +403,11 @@ Page({
     checkTime(date) {
         let now = Date.parse(new Date())
         let select = Date.parse(new Date(date))
+        console.log(now.select);
         if (select > now) {
-            return true
-        } else {
             return false
+        } else {
+            return true
         }
     }
 })
