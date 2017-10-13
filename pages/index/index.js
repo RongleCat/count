@@ -1,40 +1,75 @@
 // pages/index/index.js
 const app = getApp()
+const url = 'https://weapp.fmcat.top'
+
 Page({
     data: {
         nickName: '点击登录',
-        userInfo: {},
         hasUserInfo: false,
-        tabList:['我创建的','我参加的'],
-        tabSelect:0,
-        list:[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
+        tabList: ['我创建的', '我参加的', '我接管的'],
+        tabSelect: 0,
+        list: [],
+        page: 0
     },
-    onLoad: function (options) {
-        if (app.globalData.userInfo) {
-            this.setData({
-                userInfo: app.globalData.userInfo,
-                hasUserInfo: true
-            })
+    onLoad: function(options) {
+        let that = this
+        if (wx.getStorageSync('sessionId').length != 0) {
+            that.requestList()
         } else {
-            // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-            // 所以此处加入 callback 以防止这种情况
-            app.userInfoReadyCallback = res => {
-                this.setData({
-                    userInfo: res,
-                    hasUserInfo: true
-                })
+            app.index = () => {
+                that.requestList()
             }
         }
-    },
-    scroll(e) {
-        console.log(e)
     },
     getUserInfo() {
         app.loginFun()
     },
-    changeTab(e){
+    changeTab(e) {
+        let index = parseInt(e.currentTarget.dataset.index)
         this.setData({
-            tabSelect:parseInt(e.currentTarget.dataset.index)
+            tabSelect: index,
+            page: 0,
+            list: []
+        })
+        this.requestList()
+    },
+    InfiniteLoad(e) {
+        console.log(e);
+    },
+    //请求tab列表信息
+    requestList() {
+        wx.showLoading({
+            title: '请稍后...'
+        })
+        let that = this
+        let page = this.data.page
+        let tabSelect = this.data.tabSelect
+        console.log(tabSelect);
+        let urlname = ['MyPublish', 'MyPartake', 'MyPublish']
+        console.log(urlname[tabSelect]);
+        wx.request({
+            url: url + '/Order/' + urlname[tabSelect],
+            header: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: {
+                sessionId: wx.getStorageSync('sessionId'),
+                page: page,
+                pagesize: 3
+            },
+            success: function(res) {
+                console.log(res.data.result);
+                that.setData({
+                    list: res.data.result.data
+                })
+                wx.hideLoading();
+            }
+        })
+    },
+    goOrderDetail(e) {
+        let id = e.currentTarget.dataset.id
+        wx.navigateTo({
+            url: '../detail/detail?id=' + id
         })
     }
 })

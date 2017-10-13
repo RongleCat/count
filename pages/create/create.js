@@ -1,6 +1,8 @@
 // pages/create/create.js
 const url = 'https://weapp.fmcat.top'
 const util = require('../../utils/util')
+const app = getApp()
+
 Array.prototype.remove = function(index) {
     this.splice(index, 1);
 };
@@ -8,14 +10,11 @@ Page({
     data: {
         title: '',
         img: [],
+        imgId: [],
         viewImg: [],
         jindu: [],
         goodEdit: false,
-        goods: [{
-            Name: '火鸡(500g为一件)',
-            Price: '56.00',
-            Count: '100'
-        }],
+        goods: [],
         goodItem: {
             Name: '',
             Price: '',
@@ -23,7 +22,7 @@ Page({
         },
         editIndex: -1,
         region: false,
-        regionname: ['北京', '上海', '南京'],
+        regionname: [],
         password: {
             adminpwd: '',
             managepwd: ''
@@ -49,6 +48,9 @@ Page({
         this.setData({
             startTime: time
         })
+        app.create = () => {
+            console.log(wx.getStorageSync('sessionId'));
+        }
     },
     upImage() {
         let that = this;
@@ -66,8 +68,10 @@ Page({
                             let result = JSON.parse(res.data).result
                             console.log(res)
                             let img = that.data.img
+                            let imgId = that.data.imgId
                             that.setData({
-                                img: [...img, result.origin]
+                                img: [...img, result.origin],
+                                imgId: [...imgId, result.imgid]
                             })
                         },
                         fail: res => {
@@ -222,9 +226,6 @@ Page({
                 data: {
                     sessionId: wx.getStorageSync('sessionId')
                 },
-                header: {
-                    'Content-Type': 'application/json'
-                },
                 success: function(res) {
                     console.log(res);
                     if (res.data.result.vip) {
@@ -292,21 +293,25 @@ Page({
             password
         })
     },
+    //设置隐藏单价
     setHidePrice(e) {
         this.setData({
             hideprice: e.detail.value
         })
     },
+    //设置地区
     setRegion(e) {
         this.setData({
             region: e.detail.value
         })
     },
+    //弹窗文本框值绑定
     popInput(e) {
         this.setData({
             popInputValue: e.detail.value
         })
     },
+    //弹窗取消按钮
     popCancel() {
         let that = this
         this.setData({
@@ -320,6 +325,7 @@ Page({
             })
         }, 300);
     },
+    //弹窗确定添加新地区
     popConfirm() {
         let regionname = this.data.regionname
         let that = this
@@ -340,11 +346,13 @@ Page({
             }, 500);
         }
     },
+    //打开输入框添加地区
     createNewRegion() {
         this.setData({
             inputPopOpen: true
         })
     },
+    //删除一个地区
     deleteRegion(e) {
         let that = this
         let index = e.currentTarget.dataset.index
@@ -354,14 +362,15 @@ Page({
             regionname
         })
     },
+    //提交发布接龙
     createSubmit(e) {
         let that = this
         let d = that.data
         let info = d.info
         let post = {
             title: d.title,
-            imgs: d.img,
-            goods: d.goods,
+            imgs: d.imgId,
+            goods: JSON.stringify(d.goods),
             endtime: d.endDate + ' ' + d.endTime,
             region: d.region,
             regionnames: d.regionname.join(','),
@@ -387,19 +396,37 @@ Page({
             util.showModel('提示', '截止时间不能小于当前时间！')
             return false
         }
-
+        if (post.goods.length == 0) {
+            util.showModel('提示', '最少添加一件商品')
+            return false
+        }
+        if (post.region) {
+            if (post.regionnames.length === 0) {
+                util.showModel('提示', '最少添加一地区')
+                return false
+            }
+        }
         wx.request({
             url: url + '/Order/AddOrder',
             header: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
             method: 'POST',
             data: post,
             success: function(res) {
                 console.log(res);
+                if (res.data.ok === 1) {
+                    util.showSuccess('发布成功！')
+                    setTimeout(function() {
+                        wx.navigateTo({
+                            url: '../index/index'
+                        })
+                    }, 1000);
+                }
             }
         })
     },
+    //检查时间
     checkTime(date) {
         let now = Date.parse(new Date())
         let select = Date.parse(new Date(date))

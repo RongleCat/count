@@ -5,7 +5,8 @@
     "pages/upimg/upimg",
     "pages/create/create",
     "pages/help/help",
-    "pages/demo/demo"
+    "pages/demo/demo",
+    "pages/detail/detail"
   ],
   "window": {
     "backgroundTextStyle": "light",
