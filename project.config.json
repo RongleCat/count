@@ -12,7 +12,7 @@
 	"projectname": "count",
 	"condition": {
 		"weapp": {
-			"current": 2,
+			"current": 4,
 			"list": [
 				{
 					"id": -1,
@@ -31,6 +31,18 @@
 					"name": "detail",
 					"pathName": "pages/detail/detail",
 					"query": "id=3"
+				},
+				{
+					"id": 3,
+					"name": "edit",
+					"pathName": "pages/edit/edit",
+					"query": "id=11"
+				},
+				{
+					"id": -1,
+					"name": "index",
+					"pathName": "pages/index/index",
+					"query": ""
 				}
 			]
 		},

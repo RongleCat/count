@@ -6,7 +6,9 @@
     </view>
     <scroll-view scroll-y="true" class="order-list" lower-threshold="50" bindscrolltolower="InfiniteLoad">
         <view class="order-item" wx:for="{{list}}" wx:key="*this.PublishTime" data-id="{{item.Id}}" bindtap="goOrderDetail">
-            {{item.Title}} {{item.PublishTime}}
+            <view class="order-title">{{item.Title}}</view>
+            <view class="order-time">{{item.PublishTime}}</view>
+            {{status[item.Status]}}
         </view>
         <view class="no-item" wx:if="{{list.length == 0}}">暂无接龙</view>
         <view class="mb"></view>

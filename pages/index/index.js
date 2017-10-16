@@ -9,7 +9,8 @@ Page({
         tabList: ['我创建的', '我参加的', '我接管的'],
         tabSelect: 0,
         list: [],
-        page: 0
+        page: 0,
+        status: ['接龙中', '已截止', '已确认']
     },
     onLoad: function(options) {
         let that = this
@@ -55,7 +56,7 @@ Page({
             data: {
                 sessionId: wx.getStorageSync('sessionId'),
                 page: page,
-                pagesize: 3
+                pagesize: 100
             },
             success: function(res) {
                 console.log(res.data.result);
@@ -69,7 +70,7 @@ Page({
     goOrderDetail(e) {
         let id = e.currentTarget.dataset.id
         wx.navigateTo({
-            url: '../detail/detail?id=' + id
+            url: '../edit/edit?id=' + id
         })
     }
 })

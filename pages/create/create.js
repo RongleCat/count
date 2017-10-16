@@ -41,7 +41,8 @@ Page({
         startTime: '',
         inputPopOpen: false,
         popInputValue: '',
-        isNull: false
+        isNull: false,
+        endcount: ''
     },
     onLoad: function(options) {
         let time = util.dateFormat(new Date(), 'YYYY-MM-DD')
@@ -267,8 +268,20 @@ Page({
     },
     //绑定日期选择值
     bindDateChange(e) {
+        let endTime = this.data.endTime
+        let nowTime = ''
+            //判断是否有选择时间，如果是当天则设置当前时间延后6小时，不是当天设置为00:00
+        if (endTime == '') {
+            if (e.detail.value == util.dateFormat(new Date(), 'YYYY-MM-DD')) {
+                nowTime = util.dateFormat(Date.parse(new Date()) + 21600000, 'HH:mm')
+            } else {
+                nowTime = '00:00'
+            }
+            endTime = nowTime
+        }
         this.setData({
-            endDate: e.detail.value
+            endDate: e.detail.value,
+            endTime
         })
     },
     //判断选择时间是否比当前时间小
@@ -372,6 +385,7 @@ Page({
             imgs: d.imgId,
             goods: JSON.stringify(d.goods),
             endtime: d.endDate + ' ' + d.endTime,
+            endcount: d.endcount,
             region: d.region,
             regionnames: d.regionname.join(','),
             adminpwd: d.password.adminpwd,
@@ -396,7 +410,7 @@ Page({
             util.showModel('提示', '截止时间不能小于当前时间！')
             return false
         }
-        if (post.goods.length == 0) {
+        if (JSON.parse(post.goods).length == 0) {
             util.showModel('提示', '最少添加一件商品')
             return false
         }
@@ -416,10 +430,11 @@ Page({
             success: function(res) {
                 console.log(res);
                 if (res.data.ok === 1) {
+                    let orderid = res.data.result.orderid
                     util.showSuccess('发布成功！')
                     setTimeout(function() {
                         wx.navigateTo({
-                            url: '../index/index'
+                            url: '../edit/edit?id=' + orderid
                         })
                     }, 1000);
                 }
@@ -430,11 +445,18 @@ Page({
     checkTime(date) {
         let now = Date.parse(new Date())
         let select = Date.parse(new Date(date))
-        console.log(now.select);
+        if (date.length == 1) {
+            return false
+        }
         if (select > now) {
             return false
         } else {
             return true
         }
+    },
+    setEndCount(e) {
+        this.setData({
+            endcount: e.detail.value
+        })
     }
 })

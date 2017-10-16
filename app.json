@@ -6,7 +6,8 @@
     "pages/create/create",
     "pages/help/help",
     "pages/demo/demo",
-    "pages/detail/detail"
+    "pages/detail/detail",
+    "pages/edit/edit"
   ],
   "window": {
     "backgroundTextStyle": "light",

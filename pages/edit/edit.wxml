@@ -1,14 +1,15 @@
 <view class="page">
     <scroll-view scroll-y="true" class="create-form">
         <view class="mt"></view>
+
         <view class="form-block">
             <view class="form-item title">
                 <label for="">接龙主题：</label>
-                <input type="text" class="form-input" placeholder="必填" bindinput="setTitleValue" focus="{{isNull}}" />
+                <input type="text" class="form-input" placeholder="必填" bindinput="setTitleValue" value="{{title}}" />
             </view>
             <view class="form-image-box">
-                <view class="image-box" wx:for="{{viewImg}}" wx:key="*this" data-index="{{index}}">
-                    <image src="{{item}}" mode="aspectFill" bindtap="viewImage" data-src="{{img[index]}}" />
+                <view class="image-box" wx:for="{{img}}" wx:key="*this" data-index="{{index}}">
+                    <image src="{{item}}" mode="aspectFill" bindtap="viewImage" data-src="{{bigImg[index]}}" />
                     <view class="uploading-layer" wx:if="{{!jindu[index] == 0}}">
                         <view class="progress-bar">
                             <view class="complete-progress" style="width:{{jindu[index]}}%"></view>
@@ -24,7 +25,7 @@
             <view class="goods-list" wx:if="{{goods.length!=0}}">
                 <view wx:for="{{goods}}" class="goods-item" wx:key="*this.Name">
                     <view class="good-name">{{item.Name}}</view>
-                    <view class="good-info">单价：<span class="good-price">￥{{item.Price}}</span>　　数量：{{item.Count.length==0?'无限量':item.Count}}</view>
+                    <view class="good-info">单价：<span class="good-price">￥{{item.Price}}</span>　　数量：{{item.StockCount.length==0 || item.StockCount==null?'无限量':item.StockCount}}</view>
                     <view class="btn-edit-good" data-index="{{index}}" bindtap="editGood">
                         <view class="icon-edit">
                             <span class="dot"></span><span class="pen"></span><span class="head"></span>
@@ -44,7 +45,7 @@
                 </view>
                 <view class="form-item">
                     <label for="">可售数量：</label>
-                    <input type="number" class="form-input" value="{{goodItem.Count}}" data-param="Count" bindinput="setGoodValue" placeholder="不填为无上限" />
+                    <input type="number" class="form-input" value="{{goodItem.StockCount}}" data-param="StockCount" bindinput="setGoodValue" placeholder="不填为无上限" />
                 </view>
                 <view class="btn-comfirm-good" bindtap="addGood">确认{{editIndex==-1?'添加':'修改'}}</view>
             </view>
@@ -69,14 +70,14 @@
             </view>
             <view class="form-item">
                 <label for="">截止人数：</label>
-                <input type="number" class="form-input" bindinput="setEndCount" value="{{endcount}}" placeholder="选填" />
+                <input type="number" class="form-input" value="{{endcount}}" placeholder="选填" />
             </view>
             <view class="form-block-tip">报名附加信息</view>
             <view class="form-item">
                 <checkbox-group bindchange="checkboxChange" class="check-list">
-                    <label class="checkbox"><checkbox value="phone" />手机号</label>
-                    <label class="checkbox"><checkbox value="realname" />真实姓名</label>
-                    <label class="checkbox"><checkbox value="weixin" />微信号</label>
+                    <label class="checkbox"><checkbox checked="{{info.phone}}" value="phone" />手机号</label>
+                    <label class="checkbox"><checkbox checked="{{info.realname}}" value="realname" />真实姓名</label>
+                    <label class="checkbox"><checkbox checked="{{info.weixin}}" value="weixin" />微信号</label>
                 </checkbox-group>
             </view>
         </view>
@@ -122,9 +123,10 @@
             </block>
         </view>
         <view class="mb"></view>
+
     </scroll-view>
-    <view class="btn-create-submit" bindtap="createSubmit">
-        发布接龙
+    <view class="btn-create-submit" bindtap="changeSubmit">
+        修改接龙
     </view>
     <view class="pop-container" wx:if="{{popOpen}}">
         <view class="pop-main {{closeIng?'close':''}}">
