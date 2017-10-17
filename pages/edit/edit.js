@@ -220,6 +220,7 @@ Page({
     //检查时间
     checkTime(date) {
         let now = Date.parse(new Date())
+        date = date.replace(/-/g, '/');
         let select = Date.parse(new Date(date))
         if (date.length == 1) {
             return false

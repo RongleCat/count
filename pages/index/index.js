@@ -10,7 +10,9 @@ Page({
         tabSelect: 0,
         list: [],
         page: 0,
-        status: ['接龙中', '已截止', '已确认']
+        status: ['接龙中', '已截止', '已确认'],
+        isLoading: false,
+        isNoData: false
     },
     onLoad: function(options) {
         let that = this
@@ -30,11 +32,22 @@ Page({
         this.setData({
             tabSelect: index,
             page: 0,
-            list: []
+            list: [],
+            isNoData: false
         })
         this.requestList()
     },
     InfiniteLoad(e) {
+        let that = this
+        if (that.data.isLoading || that.data.isNoData) {
+            return false
+        }
+        let page = that.data.page
+        that.setData({
+            isLoading: true,
+            page: ++page
+        })
+        that.requestList()
         console.log(e);
     },
     //请求tab列表信息
@@ -46,7 +59,8 @@ Page({
         let page = this.data.page
         let tabSelect = this.data.tabSelect
         console.log(tabSelect);
-        let urlname = ['MyPublish', 'MyPartake', 'MyPublish']
+        let urlname = ['MyPublish', 'MyPartake', 'MyManage']
+        let list = that.data.list
         console.log(urlname[tabSelect]);
         wx.request({
             url: url + '/Order/' + urlname[tabSelect],
@@ -56,14 +70,25 @@ Page({
             data: {
                 sessionId: wx.getStorageSync('sessionId'),
                 page: page,
-                pagesize: 100
+                pagesize: 8
             },
             success: function(res) {
                 console.log(res.data.result);
-                that.setData({
-                    list: res.data.result.data
-                })
-                wx.hideLoading();
+                let resList = res.data.result.data
+                setTimeout(function() {
+                    if (resList.length < 8 && page != 0) {
+                        that.setData({
+                            isNoData: true
+                        })
+                    }
+                    that.setData({
+                        list: [...list, ...resList]
+                    })
+                    that.setData({
+                        isLoading: false
+                    })
+                    wx.hideLoading();
+                }, 1000);
             }
         })
     },
@@ -72,5 +97,8 @@ Page({
         wx.navigateTo({
             url: '../edit/edit?id=' + id
         })
+    },
+    copyOrder() {
+        console.log('aaaaaa');
     }
 })
