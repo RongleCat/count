@@ -1,1 +1,6 @@
-{}
+{
+    "navigationBarTitleText": "编辑接龙",
+    "navigationBarBackgroundColor": "#26c6da",
+    "navigationBarTextStyle": "white",
+    "disableScroll": true
+}

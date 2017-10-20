@@ -95,7 +95,7 @@ Page({
     goOrderDetail(e) {
         let id = e.currentTarget.dataset.id
         wx.navigateTo({
-            url: '../edit/edit?id=' + id
+            url: '../detail/detail?id=' + id
         })
     },
     copyOrder() {

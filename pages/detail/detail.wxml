@@ -1,1 +1,8 @@
-.
+<view class="page">
+    <scroll-view class="dteail-content" scroll-y="true">
+
+    </scroll-view>
+    <view class="bottom-bar">
+
+    </view>
+</view>

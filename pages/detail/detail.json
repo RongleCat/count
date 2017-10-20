@@ -1,1 +1,7 @@
-{}
+{
+    "navigationBarTitleText": "接龙详情",
+    "navigationBarBackgroundColor": "#26c6da",
+    "navigationBarTextStyle": "white",
+    "disableScroll": true,
+    "enablePullDownRefresh": true
+}

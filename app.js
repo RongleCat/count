@@ -2,8 +2,10 @@
 const url = 'https://weapp.fmcat.top'
 App({
     onLaunch: function(e) {
-        wx.removeStorageSync('sessionId')
+        console.log('aaa');
+        // wx.removeStorageSync('sessionId')
         let path = e.path.split('/')
+        console.log(path);
         this.loginFun(path[2])
     },
     onShow(e) {
@@ -34,10 +36,14 @@ App({
                         }
                     })
                 }
+            },
+            fail: function(res) {
+                console.log(res);
             }
         })
     },
     weappLogin(that, funName) {
+        console.log(that);
         wx.showLoading({
             title: '正在登陆...'
         })
