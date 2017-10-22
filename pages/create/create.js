@@ -59,7 +59,7 @@ Page({
         let upImage = (img) => {
                 let index = that.data.viewImg.indexOf(img)
                 let uploadTask = wx.uploadFile({
-                        url: url + '/order/uploadimg', //仅为示例，非真实的接口地址
+                        url: url + '/order/uploadimg', 
                         filePath: img,
                         name: 'file',
                         formData: {
@@ -434,7 +434,7 @@ Page({
                     util.showSuccess('发布成功！')
                     setTimeout(function() {
                         wx.navigateTo({
-                            url: '../edit/edit?id=' + orderid
+                            url: '../detail/detail?id=' + orderid
                         })
                     }, 1000);
                 }

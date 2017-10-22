@@ -13,8 +13,367 @@
     }
 }
 
+.bottom-bar {
+    width: 100%;
+    height: 90rpx;
+    display: flex;
+    line-height: 90rpx;
+    font-size: 30rpx;
+    text-align: center;
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    view {
+        flex: 1;
+        border-right: 1rpx #fff dashed;
+        background: #26c6da;
+        &:not(.disabled):active {
+            opacity: .8
+        }
+        &:last-child {
+            border: 0;
+        }
+    }
+    .btn-join {
+        flex: 2;
+        &.disabled {
+            background: #ccc;
+        }
+    }
+}
 
-.dteail-content{
+.dteail-content {
     width: 100%;
     height: 100%;
+    background: #f0f0f0;
+}
+
+.content-block {
+    width: 710rpx;
+    margin-left: 20rpx;
+    margin-bottom: 20rpx;
+    padding: 20rpx;
+    position: relative;
+    background: #fff;
+    border-radius: 20rpx;
+}
+
+.block-mt {
+    height: 20rpx;
+    width: 100%;
+    display: block;
+}
+
+.release-info {
+    width: 100%;
+    min-height: 148rpx;
+    padding-left: 148rpx;
+    position: relative;
+    border-bottom: 1rpx #ddd solid;
+    .info-nickname {
+        font-size: 40rpx;
+        line-height: 60rpx;
+        color: #444;
+        padding-bottom: 10rpx;
+        border-bottom: 1rpx dashed #ccc;
+    }
+    .info-release-time {
+        font-size: 28rpx;
+        line-height: 58rpx;
+        color: #999;
+    }
+    .img-head {
+        width: 128rpx;
+        height: 128rpx;
+        display: block;
+        border: 1rpx dashed #ccc;
+        border-radius: 10rpx;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+}
+
+.order-title {
+    padding-top: 15rpx;
+    font-size: 30rpx;
+    line-height: 40rpx;
+    word-break: break-all;
+}
+
+.form-image-box {
+    width: 100%;
+    margin-top: 15rpx;
+    display: flex;
+    .image-box {
+        width: 126rpx;
+        height: 126rpx;
+        min-width: 126rpx;
+        margin-right: 10rpx;
+        position: relative;
+        image {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+.end-info {
+    padding-top: 10rpx;
+}
+
+.end-item {
+    font-size: 26rpx;
+    line-height: 40rpx;
+    color: #999;
+}
+
+.goods-item {
+    border-bottom: 1rpx #ccc dashed;
+    padding: 20rpx;
+    padding-right: 230rpx;
+    position: relative;
+    .good-name {
+        font-size: 30rpx;
+        color: #333;
+    }
+    .good-info {
+        font-size: 30rpx;
+        color: #f66;
+    }
+    .sale-info {
+        font-size: 26rpx;
+        color: #666;
+    }
+}
+
+.t-r{
+    text-align: right;
+}
+
+.count-info {
+    line-height: 30rpx;
+    font-size: 30rpx;
+    padding-top: 20rpx;
+    color: #333;
+    .font-money {
+        color: #f66;
+        font-weight: bold;
+    }
+}
+
+.select-container {
+    width: 200rpx;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    right: 0;
+}
+
+.btn-ctrl {
+    width: 48rpx;
+    height: 48rpx;
+    background: #f66;
+    position: absolute;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    &:after {
+        position: absolute;
+        display: block;
+        content: '';
+        width: 30rpx;
+        height: 4rpx;
+        background: #fff;
+        border-radius: 2rpx;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    &:before {
+        position: absolute;
+        display: block;
+        content: '';
+        width: 4rpx;
+        height: 30rpx;
+        background: #fff;
+        border-radius: 2rpx;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    &.btn-reduce {
+        left: 0;
+        &:before {
+            display: none;
+        }
+    }
+    &.btn-add {
+        right: 0;
+    }
+    &.disabled {
+        background: #ccc;
+    }
+    &:not(.disabled):active {
+        opacity: .8;
+    }
+}
+
+.select-num {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #333;
+    font-size: 30rpx;
+}
+
+.form-item {
+    height: 90rpx;
+    line-height: 90rpx;
+    font-size: 26rpx;
+    color: #444;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    border-bottom: 1rpx solid #ebebeb;
+    position: relative;
+    label {
+        flex: 1.2;
+        font-weight: bold;
+    }
+    input {
+        flex: 4;
+        height: 89rpx;
+    }
+    .piker-box {
+        flex: 4;
+        height: 89rpx;
+        display: flex;
+        picker {
+            flex: 2;
+            &:first-child {
+                flex: 1;
+            }
+        }
+    }
+    &.title {
+        font-size: 30rpx;
+    }
+}
+
+.slide-layer {
+    position: absolute;
+    bottom: 90rpx;
+    left: 0;
+    right: 0;
+    background: #fff;
+    padding: 0 20rpx;
+    z-index: 10;
+    transform: translateY(100%);
+    animation: slideOpen .2s forwards ease-in-out;
+    transform-origin: bottom center;
+    &.close {
+        transform: translateY(0);
+        animation: slideClose .2s forwards ease-in-out;
+    }
+}
+
+.slide-mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .5);
+    z-index: 1;
+    opacity: 0;
+    animation: maskLayer .1s forwards ease-out;
+    &.close {
+        opacity: 1;
+        animation: closeMaskLayer .2s forwards ease-out;
+    }
+}
+
+@keyframes slideOpen {
+    0% {
+        transform: translateY(100%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideClose {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(100%);
+    }
+}
+
+@keyframes maskLayer {
+    form {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes closeMaskLayer {
+    form {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.slide-head{
+    border-bottom: 1rpx dashed #ccc;
+    line-height: 80rpx;
+    padding: 0;
+    position: relative;
+    .slide-close{
+        width: 48rpx;
+        height: 48rpx;
+        position: absolute;
+        right: 0;
+        top: 16rpx;
+        &:after {
+            position: absolute;
+            display: block;
+            content: '';
+            width: 40rpx;
+            height: 2rpx;
+            background: #ccc;
+            border-radius: 2rpx;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+        &:before {
+            position: absolute;
+            display: block;
+            content: '';
+            width: 2rpx;
+            height: 40rpx;
+            background: #ccc;
+            border-radius: 2rpx;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+    }
 }

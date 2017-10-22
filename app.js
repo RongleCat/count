@@ -2,10 +2,8 @@
 const url = 'https://weapp.fmcat.top'
 App({
     onLaunch: function(e) {
-        console.log('aaa');
-        // wx.removeStorageSync('sessionId')
+        wx.removeStorageSync('sessionId')
         let path = e.path.split('/')
-        console.log(path);
         this.loginFun(path[2])
     },
     onShow(e) {
