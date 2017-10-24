@@ -59,6 +59,13 @@
     position: relative;
     background: #fff;
     border-radius: 20rpx;
+    &:last-child{
+        margin-bottom: 0;
+    }
+}
+
+.no-mb{
+    margin-bottom: 0;
 }
 
 .block-mt {
@@ -94,6 +101,15 @@
         position: absolute;
         top: 0;
         left: 0;
+    }
+    .take-state{
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 26rpx;
+        color: #fff;
+        background: #33cc00;
+        padding: 5rpx 10rpx;
     }
 }
 
@@ -140,6 +156,7 @@
     padding: 20rpx;
     padding-right: 230rpx;
     position: relative;
+    line-height: 50rpx;
     .good-name {
         font-size: 30rpx;
         color: #333;
@@ -150,7 +167,7 @@
     }
     .sale-info {
         font-size: 26rpx;
-        color: #666;
+        color: #999;
     }
 }
 
@@ -233,6 +250,17 @@
     transform: translate(-50%, -50%);
     color: #333;
     font-size: 30rpx;
+    text-align: center;
+}
+.select-num-over{
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #333;
+    font-size: 30rpx;
+    text-align: center;
 }
 
 .form-item {
@@ -375,5 +403,153 @@
             left: 50%;
             transform: translate(-50%, -50%) rotate(45deg);
         }
+    }
+}
+
+.content-title{
+    font-size: 26rpx;
+    color: #666;
+    line-height: 26rpx;
+    padding-bottom: 19rpx;
+    border-bottom:1rpx solid #ccc;
+}
+.no-join{
+    text-align: center;
+    line-height: 200rpx;
+    font-size: 26rpx;
+    color: #666;
+}
+
+.join-item{
+    width: 100%;
+    min-height: 150rpx;
+    border-bottom:1rpx dashed #ccc;
+    position: relative;
+    padding: 10rpx 0;
+    padding-left: 140rpx;
+    >image{
+        position: absolute;
+        left: 0;
+        top: 10rpx;
+        width: 130rpx;
+        height: 130rpx;
+        border: 1rpx dashed #ddd;
+        border-radius: 10rpx;
+    }
+    .join-time{
+        position: absolute;
+        top: 10rpx;
+        right: 0;
+        font-size: 22rpx;
+        line-height: 22rpx;
+        color: #999
+    }
+    .nickname-box{
+        font-size: 30rpx;
+        line-height: 50rpx;
+        color: #444;
+    }
+    .goods-list{
+        font-size: 26rpx;
+        line-height: 36rpx;
+        color: #666;
+    }
+}
+
+.pop-input {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+}
+
+.pop-input-main {
+    width: 540rpx;
+    border-radius: 25rpx;
+    background: #f9f9f9;
+    overflow: hidden;
+    position: absolute;
+    z-index: 10;
+    left: 105rpx;
+    top: 30%;
+    transform: scale(2);
+    animation: maxtomin .1s forwards ease-out;
+    opacity: 0;
+    &.close {
+        transform: scale(1);
+        opacity: 1;
+        animation: closeMaskLayer .2s forwards ease-out;
+    }
+    .pop-input-title {
+        line-height: 120rpx;
+        font-size: 32rpx;
+        font-weight: bold;
+        text-align: center;
+    }
+    .pop-input-content {
+        padding: 0 32rpx;
+        padding-bottom: 24rpx;
+        input {
+            width: 100%;
+            height: 50rpx;
+            border: 1rpx solid #999b9d;
+            font-size: 26rpx;
+            padding-left: 10rpx;
+            &.isNull {
+                border-color: #f00;
+            }
+        }
+    }
+    .pop-btn-box {
+        width: 100%;
+        height: 89rpx;
+        display: flex;
+        border-top: 1rpx solid #d9d9dd;
+        view {
+            flex: 1;
+            color: #007aff;
+            font-size: 32rpx;
+            text-align: center;
+            line-height: 90rpx;
+            border-right: 1rpx solid #d9d9dd;
+            &:last-child {
+                border-right: 0;
+            }
+            &:active {
+                background: #ebebeb;
+            }
+        }
+    }
+}
+
+.pop-mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .5);
+    z-index: 1;
+    opacity: 0;
+    animation: maskLayer .1s forwards ease-out;
+    &.close {
+        opacity: 1;
+        animation: closeMaskLayer .2s forwards ease-out;
+    }
+}
+@keyframes maxtomin {
+    form {
+        transform: scale(2);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
     }
 }

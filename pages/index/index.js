@@ -98,7 +98,28 @@ Page({
             url: '../detail/detail?id=' + id
         })
     },
-    copyOrder() {
-        console.log('aaaaaa');
+    copyOrder(e) {
+        let that = this
+        let orderId = e.currentTarget.dataset.id
+        let sessionId = wx.getStorageSync('sessionId')
+        console.log(orderId,sessionId);
+        wx.request({
+            url: url + '/Order/Copy',
+            header: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            method: 'GET',
+            data: {orderId,sessionId},
+            success: function(res) {
+                console.log(res);
+                if (res.data.ok === 1) {
+                    that.setData({
+                        page:0,
+                        list:[]
+                    })
+                    that.requestList()
+                }
+            }
+        })
     }
 })

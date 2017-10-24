@@ -6,6 +6,7 @@
                 <image src="{{detail.HeadImg}}" class="img-head" />
                 <view class="info-nickname">{{detail.NickName}}</view>
                 <view class="info-release-time">发布于：{{detail.PublishTime}}</view>
+                <view class="take-state" wx:if="{{detail.MyRole!=0&&detail.MyRole!=3}}">{{detail.MyRole ==1?'查看接管':'管理接管'}}</view>
                 <view class="btn-router"></view>
             </view>
             <view class="order-info">
@@ -24,57 +25,82 @@
         <view class="content-block">
             <view wx:for="{{goods}}" class="goods-item" wx:key="*this.Name">
                 <view class="good-name">{{item.Name}}</view>
-                <view class="good-info" wx:if="{{item.Price}}">单价：￥{{item.Price}}</view>
+                <view class="good-info" wx:if="{{!detail.HidePrice}}">单价：￥{{item.Price}}</view>
                 <view class="sale-info">已售：{{item.SaleCount}}　可售：{{item.StockCount.length==0 || item.StockCount==null?'无限量':item.StockCount-item.SaleCount}}</view>
                 <view class="select-container">
-                    <view class="btn-reduce btn-ctrl disabled" data-index="{{index}}" data-type="reduce" bindtap="countChange"></view>
-                    <view class="btn-add btn-ctrl" data-index="{{index}}" data-type="add" bindtap="countChange"></view>
-                    <view class="select-num">{{item.MyOrderCount}}</view>
+                    <block wx:if="{{!detail.IncludeMe}}">
+                        <view class="btn-reduce btn-ctrl disabled" data-index="{{index}}" data-type="reduce" bindtap="countChange"></view>
+                        <view class="btn-add btn-ctrl" data-index="{{index}}" data-type="add" bindtap="countChange"></view>
+                        <input type="number" class="select-num" value="{{item.MyOrderCount}}" data-index="{{index}}" bindinput="inputCount" bindblur="inputCountBlur"
+                        />
+                    </block>
+                    <view class="select-num-over" wx:else>已选 {{item.MyOrderCount}}</view>
                 </view>
             </view>
             <view class="count-info t-r">
                 已选
-                <span class="{{selectCount==0?'':'font-money'}}">{{selectCount}}</span> 件商品<span wx:if="{{!detail.HidePrice}}">，共
-                <span class="{{moneyCount==0?'':'font-money'}}">￥{{moneyCount}}</span></span>
+                <span class="{{selectCount==0?'':'font-money'}}">{{selectCount}}</span> 件商品
+                <span wx:if="{{!detail.HidePrice}}">，共
+                    <span class="{{moneyCount==0?'':'font-money'}}">￥{{moneyCount}}</span>
+                </span>
             </view>
         </view>
+        <view class="content-block no-mb">
+            <view class="content-title">已接龙的人</view>
+            <view class="join-list-container">
+                <view class="join-item" wx:for="{{join}}" wx:key="{{index}}">
+                    <image src="{{item.HeadImg?item.HeadImg:'./user.png'}}" />
+                    <view class="nickname-box">{{item.NickName}}</view>
+                    <view class="join-time">{{item.PartakTime}}</view>
+                    <view class="goods-list">
+                        <view wx:for="{{item.GoodsList}}" wx:for-item="good" wx:key="{{index}}">{{good.GoodsName}}×{{good.Count}}</view>
+                    </view>
+                </view>
+            </view>
+            <view class="no-join" wx:if="{{join.length == 0}}">
+                谁会是第一个接龙的人呢？
+            </view>
+        </view>
+        <view class="block-mt"></view>
     </scroll-view>
     <view class="bottom-bar">
         <view class="btn-backhome" bindtap="backHome">首页</view>
         <view class="btn-manage" bindtap="openManageList">管理</view>
-        <view class="btn-join {{selectCount==0?'disabled':''}}" wx:if="{{!slideOpen}}" bindtap="openSlide">我要接龙</view>
-        <view class="btn-join" wx:else>提交接龙</view>
+        <view class="btn-join disabled" wx:if="{{detail.Status == 1}}">已截止</view>
+        <view class="btn-join" wx:elif="{{detail.IncludeMe}}">修改接龙</view>
+        <view class="btn-join {{selectCount==0?'disabled':''}}" wx:elif="{{!slideOpen}}" bindtap="openSlide">我要接龙</view>
+        <view class="btn-join" wx:else bindtap="sendJoin">提交接龙</view>
     </view>
     <block wx:if="{{slideOpen}}">
         <view class="slide-layer {{closeIng?'close':''}}">
             <view class="slide-head count-info">
                 已选
-                <span class="{{selectCount==0?'':'font-money'}}">{{selectCount}}</span> 件商品<span wx:if="{{!detail.HidePrice}}">，共
-                <span class="{{moneyCount==0?'':'font-money'}}">￥{{moneyCount}}</span></span>
+                <span class="{{selectCount==0?'':'font-money'}}">{{selectCount}}</span> 件商品
+                <span wx:if="{{!detail.HidePrice}}">，共
+                    <span class="{{moneyCount==0?'':'font-money'}}">￥{{moneyCount}}</span>
+                </span>
                 <view class="slide-close" bindtap="closeSlide"></view>
             </view>
             <view class="form-item" wx:if="{{detail.NeedName}}">
                 <label for="">真实姓名：</label>
-                <input type="text" class="form-input" value="{{goodItem.Name}}" data-param="Name" bindinput="setGoodValue" placeholder="填写商品名称"
+                <input type="text" class="form-input" value="{{submitJoin.realname}}" data-param="realname" bindinput="setSubmitData" placeholder="请填写真实姓名"
                 />
             </view>
             <view class="form-item" wx:if="{{detail.NeedPhone}}">
                 <label for="">手机号码：</label>
-                <input type="number" class="form-input" value="{{goodItem.Name}}" data-param="Name" bindinput="setGoodValue" placeholder="填写商品名称"
+                <input type="number" class="form-input" value="{{submitJoin.phone}}" data-param="phone" bindinput="setSubmitData" placeholder="请填写手机号码"
                 />
             </view>
             <view class="form-item" wx:if="{{detail.NeedWeixin}}">
                 <label for="">微信号：</label>
-                <input type="text" class="form-input" value="{{goodItem.Name}}" data-param="Name" bindinput="setGoodValue" placeholder="填写商品名称"
+                <input type="text" class="form-input" value="{{submitJoin.weixin}}" data-param="weixin" bindinput="setSubmitData" placeholder="请填写微信号"
                 />
             </view>
             <view class="form-item" wx:if="{{detail.NeedRegion}}">
                 <label for="">选择地区：</label>
                 <view class="piker-box">
                     <picker bindchange="setSelectRegion" mode="selector" range="{{Regions}}">
-                        <view class="picker">
-                            {{selectRegion==''?'请选择地区':Regions[selectRegion]}}
-                        </view>
+                        <view class="picker">{{selectRegion==''?'请选择地区':Regions[selectRegion]}}</view>
                     </picker>
                 </view>
             </view>
@@ -82,14 +108,32 @@
                 <label for="">信息显示：</label>
                 <view class="piker-box">
                     <picker bindchange="setSelectHeadName" mode="selector" range="{{headName}}">
-                        <view class="picker">
-                            {{selectHeadName==''?'请选择头像昵称显示模式':headName[selectHeadName]}}
-                        </view>
+                        <view class="picker">{{selectHeadName==''?'请选择头像昵称显示模式':headName[selectHeadName]}}</view>
                     </picker>
                 </view>
+            </view>
+            <view class="form-item" wx:if="{{detail.NeedWeixin}}">
+                <label for="">备注：</label>
+                <input type="text" class="form-input" value="{{submitJoin.memo}}" data-param="memo" bindinput="setSubmitData" placeholder="请填写备注（选填）"
+                />
             </view>
             <view class="block-mt"></view>
         </view>
         <view class="slide-mask {{closeIng?'close':''}}"></view>
     </block>
+</view>
+<view class="pop-input" wx:if="{{inputPopOpen}}">
+    <view class="pop-input-main {{closeIng?'close':''}}">
+        <view class="pop-input-title">
+            接管接龙
+        </view>
+        <view class="pop-input-content">
+            <input type="text" placeholder="填写接管密码" bindinput="popInput" class="{{isNull?'isNull':''}}" />
+        </view>
+        <view class="pop-btn-box">
+            <view class="btn-cancel" bindtap="popCancel">取消</view>
+            <view class="btn-confirm" bindtap="popConfirm">确定</view>
+        </view>
+    </view>
+    <view class="pop-mask {{closeIng?'close':''}}"></view>
 </view>
