@@ -18,6 +18,7 @@ Page({
     data: {
         detail: {},
         id: '',
+        loadingEnd:false,
         smallImg: [],
         bigImg: [],
         goods: [],
@@ -30,9 +31,9 @@ Page({
         headName: ['全部公开', '全部匿名'],
         selectHeadName: '',
         join: [],
-        inputPopOpen:false,
-        isNull:false,
-        popInputValue:'',
+        inputPopOpen: false,
+        isNull: false,
+        popInputValue: '',
         submitJoin: {
             realname: '',
             phone: '',
@@ -78,6 +79,7 @@ Page({
         let that = this
         let sessionId = wx.getStorageSync('sessionId')
         let id = that.data.id
+        wx.showLoading('正在加载')
         wx.request({
             url: url + '/Order/GetDetail',
             data: {
@@ -97,8 +99,10 @@ Page({
                         detail: res.data.result,
                         smallImg,
                         bigImg,
-                        Regions: data.Regions
+                        Regions: data.Regions,
+                        loadingEnd:true
                     })
+                    wx.hideLoading()
                 }
             }
         })
@@ -207,7 +211,7 @@ Page({
                 list = ['接管接龙']
                 break;
             case 1:
-                list = ['导出报表','接管接龙']
+                list = ['导出报表', '接管接龙']
                 break;
             case 2:
                 list = ['导出报表', '编辑接龙', '截止接龙']
@@ -217,7 +221,7 @@ Page({
                 break;
         }
         if (state === 1) {
-            if (list.indexOf('截止接龙')!=-1) {
+            if (list.indexOf('截止接龙') != -1) {
                 list[list.indexOf('截止接龙')] = '开启接龙'
             }
         }
@@ -232,25 +236,28 @@ Page({
                     },
                     edit() {
                         wx.navigateTo({
-                            url: '../edit/edit?id='+orderId
+                            url: '../edit/edit?id=' + orderId
                         })
                     },
                     stop() {
                         wx.showLoading('正在截止')
                         wx.request({
-                            url: url+'/Order/ChangeOrderStatus',
+                            url: url + '/Order/ChangeOrderStatus',
                             header: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
                             },
-                            method:'POST',
-                            data:{
+                            method: 'POST',
+                            data: {
                                 sessionId,
                                 orderId,
-                                status:1
+                                status: 1
                             },
-                            success: function(res) {
-                                util.showSuccess('已截止')
-                                that.getDetail()
+                            success: function (res) {
+                                console.log(res);
+                                if (res.data.ok === 1) {
+                                    util.showSuccess('已截止')
+                                    that.getDetail()
+                                }
                             }
                         })
                     },
@@ -262,23 +269,26 @@ Page({
                     start() {
                         wx.showLoading('正在开启')
                         wx.request({
-                            url: url+'/Order/ChangeOrderStatus',
+                            url: url + '/Order/ChangeOrderStatus',
                             header: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
                             },
-                            method:'POST',
-                            data:{
+                            method: 'POST',
+                            data: {
                                 sessionId,
                                 orderId,
-                                status:0
+                                status: 0
                             },
-                            success: function(res) {
-                                util.showSuccess('已开启')
-                                that.getDetail()
+                            success: function (res) {
+                                console.log(res);
+                                if (res.data.ok === 1) {
+                                    util.showSuccess('已开启')
+                                    that.getDetail()
+                                }
                             }
                         })
                     },
-                    cancel(){
+                    cancel() {
                         return false
                     }
                 }
@@ -385,7 +395,7 @@ Page({
             popInputValue: '',
             closeIng: true
         })
-        setTimeout(function() {
+        setTimeout(function () {
             that.setData({
                 closeIng: false,
                 inputPopOpen: false
@@ -409,7 +419,7 @@ Page({
                     orderId,
                     pwd
                 },
-                success: function(res) {
+                success: function (res) {
                     if (res.data.ok === 1) {
                         util.showSuccess('已接管')
                         that.getDetail()
@@ -421,7 +431,7 @@ Page({
             that.setData({
                 isNull: true
             })
-            setTimeout(function() {
+            setTimeout(function () {
                 that.setData({
                     isNull: false
                 })

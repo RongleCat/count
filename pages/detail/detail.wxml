@@ -1,5 +1,5 @@
 <view class="page">
-    <scroll-view class="dteail-content" scroll-y="true">
+    <scroll-view class="dteail-content" scroll-y="true" wx:if="{{loadingEnd}}">
         <view class="block-mt"></view>
         <view class="content-block">
             <view class="release-info">

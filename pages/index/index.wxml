@@ -26,6 +26,6 @@
         <view class="mb"></view>
     </scroll-view>
     <view class="btn-create">
-        <navigator url="../create/create" hover-class="active">新建拼团</navigator>
+        <navigator url="../create/create" hover-class="active">新建接龙</navigator>
     </view>
 </view>
