@@ -4,7 +4,7 @@
         <view class="form-block">
             <view class="form-item title">
                 <label for="">接龙主题：</label>
-                <input type="text" class="form-input" placeholder="必填" bindinput="setTitleValue" focus="{{isNull}}" />
+                <input type="text" class="form-input" placeholder="必填" value="{{title}}" bindinput="setTitleValue" focus="{{isNull}}" />
             </view>
             <view class="form-image-box">
                 <view class="image-box" wx:for="{{viewImg}}" wx:key="*this" data-index="{{index}}">
@@ -24,7 +24,7 @@
             <view class="goods-list" wx:if="{{goods.length!=0}}">
                 <view wx:for="{{goods}}" class="goods-item" wx:key="*this.Name">
                     <view class="good-name">{{item.Name}}</view>
-                    <view class="good-info">单价：<span class="good-price">￥{{item.Price}}</span>　　数量：{{item.Count.length==0?'无限量':item.Count}}</view>
+                    <view class="good-info">单价：<span class="good-price">￥{{item.Price}}</span>　　数量：{{item.Count.length==0 || item.Count==null?'无限量':item.Count}}</view>
                     <view class="btn-edit-good" data-index="{{index}}" bindtap="editGood">
                         <view class="icon-edit">
                             <span class="dot"></span><span class="pen"></span><span class="head"></span>

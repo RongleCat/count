@@ -13,7 +13,7 @@ Page({
         imgId: [],
         viewImg: [],
         jindu: [],
-        goodEdit: false,
+        goodEdit: true,
         goods: [],
         goodItem: {
             Name: '',
@@ -38,19 +38,44 @@ Page({
         vip: false,
         headshowmode: ['公开', '接龙者自选', '匿名隐藏'],
         headSelect: 0,
-        startTime: '',
         inputPopOpen: false,
         popInputValue: '',
         isNull: false,
         endcount: ''
     },
-    onLoad: function(options) {
-        let time = util.dateFormat(new Date(), 'YYYY-MM-DD')
-        this.setData({
-            startTime: time
-        })
+    onLoad: function(e) {
+        let that = this
         app.create = () => {
             console.log(wx.getStorageSync('sessionId'));
+        }
+        if (e.type === 'copy') {
+            let json = app.globalData.copyJson
+            let img = that.data.img
+            let viewImg = that.data.viewImg
+            let imgId = that.data.imgId
+            let goods = that.data.goods
+
+            json.Imgs.forEach(function(item) {
+                img = [...img, 'https://weapp.fmcat.top/' + item.Origin]
+                viewImg = [...viewImg, 'https://weapp.fmcat.top/' + item.Thumb]
+                imgId = [...imgId, item.Gid]
+            }, this);
+
+            json.Goods.forEach(function(item) {
+                item.Count = item.StockCount
+                delete item.StockCount
+            }, this);
+
+            goods = json.Goods
+
+            that.setData({
+                title: json.Title,
+                img,
+                viewImg,
+                imgId,
+                goods,
+                goodEdit: false
+            })
         }
     },
     upImage() {
@@ -59,7 +84,7 @@ Page({
         let upImage = (img) => {
                 let index = that.data.viewImg.indexOf(img)
                 let uploadTask = wx.uploadFile({
-                        url: url + '/order/uploadimg', 
+                        url: url + '/order/uploadimg',
                         filePath: img,
                         name: 'file',
                         formData: {
@@ -128,14 +153,17 @@ Page({
     delImage(e) {
         let index = e.currentTarget.dataset.index
         let img = this.data.img
+        let imgId = this.data.imgId
         let jindu = this.data.jindu
         let viewImg = this.data.viewImg
         img.remove(index)
+        imgId.remove(index)
         jindu.remove(index)
         viewImg.remove(index)
         this.setData({
             img,
             jindu,
+            imgId,
             viewImg
         })
     },
@@ -432,6 +460,7 @@ Page({
                 if (res.data.ok === 1) {
                     let orderid = res.data.result.orderid
                     util.showSuccess('发布成功！')
+                    app.globalData.copyJson = {}
                     setTimeout(function() {
                         wx.navigateTo({
                             url: '../detail/detail?id=' + orderid

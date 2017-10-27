@@ -112,11 +112,11 @@
                         </view>
                     </picker>
                 </view>
-                <view class="form-item">
+                <view class="form-item" wx:if="{{password.managepwd}}">
                     <label for="">查看密码：</label>
-                    <input type="text" class="form-input" value="{{password.managepwd}}" data-param="managepwd" bindinput="setPassword" placeholder="填写查看密码（可选）" />
+                    <input type="text" class="form-input" value="" data-param="managepwd" bindinput="setPassword" placeholder="填写查看密码（可选）" />
                 </view>
-                <view class="form-item">
+                <view class="form-item" wx:if="{{password.adminpwd}}">
                     <label for="">管理密码：</label>
                     <input type="text" class="form-input" value="{{password.adminpwd}}" data-param="adminpwd" bindinput="setPassword" placeholder="填写管理密码（可选）" />
                 </view>

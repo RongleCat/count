@@ -6,16 +6,8 @@ App({
         let path = e.path.split('/')
         this.loginFun(path[2])
     },
-    onShow(e) {
-        // console.log(e);
-        // let path = e.path.split('/')
-        // if (this[path[2]]) {
-        //     this[path[2]]()
-        // }
-    },
     globalData: {
-        userInfo: null,
-        isVip: false
+        copyJson: {}
     },
     loginFun(funName) {
         let that = this

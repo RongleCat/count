@@ -2,7 +2,7 @@
 const app = getApp()
 const url = 'https://weapp.fmcat.top'
 const util = require('../../utils/util')
-Number.prototype.formatMoney = function (places, symbol, thousand, decimal) {
+Number.prototype.formatMoney = function(places, symbol, thousand, decimal) {
     places = !isNaN(places = Math.abs(places)) ? places : 2;
     symbol = symbol !== undefined ? symbol : "$";
     thousand = thousand || ",";
@@ -18,7 +18,7 @@ Page({
     data: {
         detail: {},
         id: '',
-        loadingEnd:false,
+        loadingEnd: false,
         smallImg: [],
         bigImg: [],
         goods: [],
@@ -44,7 +44,7 @@ Page({
             showheadnickname: true
         }
     },
-    onLoad: function (e) {
+    onLoad: function(e) {
         let that = this
         this.setData({
             id: e.id
@@ -66,11 +66,11 @@ Page({
         return {
             title: that.data.detail.Title,
             path: '/pages/detail/detail?id=' + that.data.id,
-            success: function (res) {
+            success: function(res) {
                 // 转发成功
                 util.showSuccess('转发成功！')
             },
-            fail: function (res) {
+            fail: function(res) {
                 util.showModel('提示', '转发失败！')
             }
         }
@@ -86,12 +86,12 @@ Page({
                 id,
                 sessionId
             },
-            success: function (res) {
+            success: function(res) {
                 if (res.data.ok === 1) {
                     let data = res.data.result
                     let smallImg = []
                     let bigImg = []
-                    data.Imgs.forEach(function (item) {
+                    data.Imgs.forEach(function(item) {
                         smallImg = [...smallImg, 'https://weapp.fmcat.top/' + item.Thumb]
                         bigImg = [...bigImg, 'https://weapp.fmcat.top/' + item.Origin]
                     }, this);
@@ -100,7 +100,7 @@ Page({
                         smallImg,
                         bigImg,
                         Regions: data.Regions,
-                        loadingEnd:true
+                        loadingEnd: true
                     })
                     wx.hideLoading()
                 }
@@ -112,7 +112,7 @@ Page({
                 orderId: id,
                 sessionId
             },
-            success: function (res) {
+            success: function(res) {
                 console.log(res);
                 that.setData({
                     goods: res.data.result
@@ -126,7 +126,7 @@ Page({
                 orderId: id,
                 sessionId
             },
-            success: function (res) {
+            success: function(res) {
                 console.log(res);
                 that.setData({
                     join: res.data.result
@@ -173,7 +173,7 @@ Page({
         that.setData({
             closeIng: true
         })
-        setTimeout(function () {
+        setTimeout(function() {
             that.setData({
                 closeIng: false,
                 slideOpen: false
@@ -227,7 +227,7 @@ Page({
         }
         wx.showActionSheet({
             itemList: list,
-            success: function (res) {
+            success: function(res) {
                 let selectName = list[res.tapIndex]
                 let funName = 'cancel'
                 let funList = {
@@ -252,7 +252,7 @@ Page({
                                 orderId,
                                 status: 1
                             },
-                            success: function (res) {
+                            success: function(res) {
                                 console.log(res);
                                 if (res.data.ok === 1) {
                                     util.showSuccess('已截止')
@@ -279,7 +279,7 @@ Page({
                                 orderId,
                                 status: 0
                             },
-                            success: function (res) {
+                            success: function(res) {
                                 console.log(res);
                                 if (res.data.ok === 1) {
                                     util.showSuccess('已开启')
@@ -311,7 +311,7 @@ Page({
                 }
                 funList[funName]()
             },
-            fail: function (res) {
+            fail: function(res) {
                 console.log(res.errMsg)
             }
         })
@@ -344,7 +344,7 @@ Page({
         let moneyCount = 0
         let that = this
         let goods = that.data.goods
-        goods.forEach(function (item) {
+        goods.forEach(function(item) {
             selectCount += parseInt(item.MyOrderCount || 0)
             moneyCount += parseInt(item.MyOrderCount || 0) * parseFloat(item.Price)
         }, this);
@@ -395,7 +395,7 @@ Page({
             popInputValue: '',
             closeIng: true
         })
-        setTimeout(function () {
+        setTimeout(function() {
             that.setData({
                 closeIng: false,
                 inputPopOpen: false
@@ -419,7 +419,7 @@ Page({
                     orderId,
                     pwd
                 },
-                success: function (res) {
+                success: function(res) {
                     if (res.data.ok === 1) {
                         util.showSuccess('已接管')
                         that.getDetail()
@@ -431,7 +431,7 @@ Page({
             that.setData({
                 isNull: true
             })
-            setTimeout(function () {
+            setTimeout(function() {
                 that.setData({
                     isNull: false
                 })
@@ -445,7 +445,7 @@ Page({
         let d = that.data.detail
         let goods = that.data.goods
         let orderGoodsJson = []
-        goods.forEach(function (item) {
+        goods.forEach(function(item) {
             if (parseInt(item.MyOrderCount) > 0) {
                 orderGoodsJson.push({
                     GoodsId: item.Id,
@@ -486,6 +486,7 @@ Page({
         submitJoin.orderId = parseInt(that.data.id)
         submitJoin.sessionId = wx.getStorageSync('sessionId')
         console.log(submitJoin);
+        wx.showLoading('正在提交')
         wx.request({
             url: url + '/Order/AddChild',
             header: {
@@ -493,12 +494,15 @@ Page({
             },
             method: 'POST',
             data: submitJoin,
-            success: function (res) {
-                console.log(res);
+            success: function(res) {
                 if (res.data.ok === 1) {
+                    util.showSuccess('提交成功')
                     that.closeSlide()
                     that.getDetail()
                 }
+            },
+            fail: function(res) {
+                util.showModel('提示', '出现了错误，请稍后重试')
             }
         })
     }

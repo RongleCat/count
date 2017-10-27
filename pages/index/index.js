@@ -102,22 +102,20 @@ Page({
         let that = this
         let orderId = e.currentTarget.dataset.id
         let sessionId = wx.getStorageSync('sessionId')
-        console.log(orderId,sessionId);
+        console.log(orderId, sessionId);
         wx.request({
             url: url + '/Order/Copy',
             header: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             method: 'GET',
-            data: {orderId,sessionId},
+            data: { orderId, sessionId },
             success: function(res) {
-                console.log(res);
                 if (res.data.ok === 1) {
-                    that.setData({
-                        page:0,
-                        list:[]
+                    app.globalData.copyJson = res.data.result
+                    wx.navigateTo({
+                        url: '../create/create?type=copy'
                     })
-                    that.requestList()
                 }
             }
         })

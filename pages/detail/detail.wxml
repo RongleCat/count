@@ -31,8 +31,7 @@
                     <block wx:if="{{!detail.IncludeMe}}">
                         <view class="btn-reduce btn-ctrl disabled" data-index="{{index}}" data-type="reduce" bindtap="countChange"></view>
                         <view class="btn-add btn-ctrl" data-index="{{index}}" data-type="add" bindtap="countChange"></view>
-                        <input type="number" class="select-num" value="{{item.MyOrderCount}}" data-index="{{index}}" bindinput="inputCount" bindblur="inputCountBlur"
-                        />
+                        <input type="number" class="select-num" value="{{item.MyOrderCount}}" data-index="{{index}}" bindinput="inputCount" bindblur="inputCountBlur" />
                     </block>
                     <view class="select-num-over" wx:else>已选 {{item.MyOrderCount}}</view>
                 </view>
@@ -67,10 +66,11 @@
         <view class="btn-backhome" bindtap="backHome">首页</view>
         <view class="btn-manage" bindtap="openManageList">管理</view>
         <view class="btn-join disabled" wx:if="{{detail.Status == 1}}">已截止</view>
-        <view class="btn-join" wx:elif="{{detail.IncludeMe}}">修改接龙</view>
+        <view class="btn-join" wx:elif="{{detail.IncludeMe}}" bindtap="changeJoin">修改接龙</view>
         <view class="btn-join {{selectCount==0?'disabled':''}}" wx:elif="{{!slideOpen}}" bindtap="openSlide">我要接龙</view>
         <view class="btn-join" wx:else bindtap="sendJoin">提交接龙</view>
     </view>
+    <button class="btn-share"></button>
     <block wx:if="{{slideOpen}}">
         <view class="slide-layer {{closeIng?'close':''}}">
             <view class="slide-head count-info">
@@ -83,18 +83,15 @@
             </view>
             <view class="form-item" wx:if="{{detail.NeedName}}">
                 <label for="">真实姓名：</label>
-                <input type="text" class="form-input" value="{{submitJoin.realname}}" data-param="realname" bindinput="setSubmitData" placeholder="请填写真实姓名"
-                />
+                <input type="text" class="form-input" value="{{submitJoin.realname}}" data-param="realname" bindinput="setSubmitData" placeholder="请填写真实姓名" />
             </view>
             <view class="form-item" wx:if="{{detail.NeedPhone}}">
                 <label for="">手机号码：</label>
-                <input type="number" class="form-input" value="{{submitJoin.phone}}" data-param="phone" bindinput="setSubmitData" placeholder="请填写手机号码"
-                />
+                <input type="number" class="form-input" value="{{submitJoin.phone}}" data-param="phone" bindinput="setSubmitData" placeholder="请填写手机号码" />
             </view>
             <view class="form-item" wx:if="{{detail.NeedWeixin}}">
                 <label for="">微信号：</label>
-                <input type="text" class="form-input" value="{{submitJoin.weixin}}" data-param="weixin" bindinput="setSubmitData" placeholder="请填写微信号"
-                />
+                <input type="text" class="form-input" value="{{submitJoin.weixin}}" data-param="weixin" bindinput="setSubmitData" placeholder="请填写微信号" />
             </view>
             <view class="form-item" wx:if="{{detail.NeedRegion}}">
                 <label for="">选择地区：</label>
@@ -114,8 +111,7 @@
             </view>
             <view class="form-item" wx:if="{{detail.NeedWeixin}}">
                 <label for="">备注：</label>
-                <input type="text" class="form-input" value="{{submitJoin.memo}}" data-param="memo" bindinput="setSubmitData" placeholder="请填写备注（选填）"
-                />
+                <input type="text" class="form-input" value="{{submitJoin.memo}}" data-param="memo" bindinput="setSubmitData" placeholder="请填写备注（选填）" />
             </view>
             <view class="block-mt"></view>
         </view>
