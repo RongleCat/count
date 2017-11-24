@@ -34,6 +34,8 @@ Page({
         inputPopOpen: false,
         isNull: false,
         popInputValue: '',
+        joined: false,
+        isChange: false,
         submitJoin: {
             realname: '',
             phone: '',
@@ -91,6 +93,7 @@ Page({
                     let data = res.data.result
                     let smallImg = []
                     let bigImg = []
+                    let joined = res.data.result.IncludeMe
                     data.Imgs.forEach(function(item) {
                         smallImg = [...smallImg, 'https://weapp.fmcat.top/' + item.Thumb]
                         bigImg = [...bigImg, 'https://weapp.fmcat.top/' + item.Origin]
@@ -100,7 +103,8 @@ Page({
                         smallImg,
                         bigImg,
                         Regions: data.Regions,
-                        loadingEnd: true
+                        loadingEnd: true,
+                        joined
                     })
                     wx.hideLoading()
                 }
@@ -124,7 +128,8 @@ Page({
             url: url + '/Order/GetDetailChildren',
             data: {
                 orderId: id,
-                sessionId
+                sessionId,
+                isManage: true
             },
             success: function(res) {
                 console.log(res);
@@ -504,6 +509,34 @@ Page({
             fail: function(res) {
                 util.showModel('提示', '出现了错误，请稍后重试')
             }
+        })
+    },
+    changeGood() {
+        let that = this
+        that.setData({
+            joined: false,
+            isChange: true
+        })
+    },
+    changeJoin() {
+        let that = this
+        let data = that.data.detail
+        let submitJoin = that.data.submitJoin
+        let selectRegion = ''
+        if (that.data.Regions) {
+            selectRegion = that.data.Regions.indexOf(data.MyRegion)
+            if (selectRegion == -1) {
+                selectRegion = 0
+            }
+        }
+        submitJoin.realname = data.MyName
+        submitJoin.phone = data.MyPhone
+        submitJoin.weixin = data.MyWeixin
+        submitJoin.region = data.MyRegion
+        that.setData({
+            slideOpen: true,
+            submitJoin,
+            selectRegion
         })
     }
 })

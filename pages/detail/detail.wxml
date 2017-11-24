@@ -28,7 +28,7 @@
                 <view class="good-info" wx:if="{{!detail.HidePrice}}">单价：￥{{item.Price}}</view>
                 <view class="sale-info">已售：{{item.SaleCount}}　可售：{{item.StockCount.length==0 || item.StockCount==null?'无限量':item.StockCount-item.SaleCount}}</view>
                 <view class="select-container">
-                    <block wx:if="{{!detail.IncludeMe}}">
+                    <block wx:if="{{!joined}}">
                         <view class="btn-reduce btn-ctrl disabled" data-index="{{index}}" data-type="reduce" bindtap="countChange"></view>
                         <view class="btn-add btn-ctrl" data-index="{{index}}" data-type="add" bindtap="countChange"></view>
                         <input type="number" class="select-num" value="{{item.MyOrderCount}}" data-index="{{index}}" bindinput="inputCount" bindblur="inputCountBlur" />
@@ -66,9 +66,10 @@
         <view class="btn-backhome" bindtap="backHome">首页</view>
         <view class="btn-manage" bindtap="openManageList">管理</view>
         <view class="btn-join disabled" wx:if="{{detail.Status == 1}}">已截止</view>
-        <view class="btn-join" wx:elif="{{detail.IncludeMe}}" bindtap="changeJoin">修改接龙</view>
+        <view class="btn-join" wx:elif="{{joined}}" bindtap="changeGood">修改接龙</view>
+        <view class="btn-join" wx:elif="{{isChange}}" bindtap="changeJoin">确认修改</view>
         <view class="btn-join {{selectCount==0?'disabled':''}}" wx:elif="{{!slideOpen}}" bindtap="openSlide">我要接龙</view>
-        <view class="btn-join" wx:else bindtap="sendJoin">提交接龙</view>
+        <view class="btn-join" wx:else bindtap="sendJoin">{{isChange?'确认修改':'提交'}}接龙</view>
     </view>
     <button class="btn-share"></button>
     <block wx:if="{{slideOpen}}">
@@ -97,7 +98,7 @@
                 <label for="">选择地区：</label>
                 <view class="piker-box">
                     <picker bindchange="setSelectRegion" mode="selector" range="{{Regions}}">
-                        <view class="picker">{{selectRegion==''?'请选择地区':Regions[selectRegion]}}</view>
+                        <view class="picker">{{selectRegion!=''?Regions[selectRegion]:'请选择地区'}}</view>
                     </picker>
                 </view>
             </view>

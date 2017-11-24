@@ -462,7 +462,7 @@ Page({
                     util.showSuccess('发布成功！')
                     app.globalData.copyJson = {}
                     setTimeout(function() {
-                        wx.navigateTo({
+                        wx.redirectTo({
                             url: '../detail/detail?id=' + orderid
                         })
                     }, 1000);
