@@ -56,7 +56,7 @@ Page({
     getDetail(id) {
         let that = this
         let sessionId = wx.getStorageSync('sessionId')
-        wx.showLoading('请稍后...')
+        wx.showLoading({title:'请稍后...'})
         wx.request({
             url: url + '/Order/GetDetail',
             data: {

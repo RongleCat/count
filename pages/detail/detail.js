@@ -2,7 +2,7 @@
 const app = getApp()
 const url = 'https://weapp.fmcat.top'
 const util = require('../../utils/util')
-Number.prototype.formatMoney = function(places, symbol, thousand, decimal) {
+Number.prototype.formatMoney = function (places, symbol, thousand, decimal) {
     places = !isNaN(places = Math.abs(places)) ? places : 2;
     symbol = symbol !== undefined ? symbol : "$";
     thousand = thousand || ",";
@@ -24,18 +24,28 @@ Page({
         goods: [],
         selectCount: 0,
         moneyCount: 0,
+        childSelectCount: 0,
+        childMoneyCount: 0,
         slideOpen: false,
         closeIng: false,
         Regions: [],
-        selectRegion: '',
+        selectRegion: -1,
         headName: ['全部公开', '全部匿名'],
-        selectHeadName: '',
+        selectHeadName: -1,
         join: [],
         inputPopOpen: false,
+        outPopOpen: false,
         isNull: false,
         popInputValue: '',
+        popOutValue: '',
         joined: false,
         isChange: false,
+        isChangeSend: false,
+        childGoodPop: false,
+        childItem: {},
+        goodsArray: [],
+        editChild: false,
+        childId: -1,
         submitJoin: {
             realname: '',
             phone: '',
@@ -46,7 +56,7 @@ Page({
             showheadnickname: true
         }
     },
-    onLoad: function(e) {
+    onLoad: function (e) {
         let that = this
         this.setData({
             id: e.id
@@ -68,11 +78,11 @@ Page({
         return {
             title: that.data.detail.Title,
             path: '/pages/detail/detail?id=' + that.data.id,
-            success: function(res) {
+            success: function (res) {
                 // 转发成功
                 util.showSuccess('转发成功！')
             },
-            fail: function(res) {
+            fail: function (res) {
                 util.showModel('提示', '转发失败！')
             }
         }
@@ -81,20 +91,20 @@ Page({
         let that = this
         let sessionId = wx.getStorageSync('sessionId')
         let id = that.data.id
-        wx.showLoading('正在加载')
+        wx.showLoading({title:'正在加载'})
         wx.request({
             url: url + '/Order/GetDetail',
             data: {
                 id,
                 sessionId
             },
-            success: function(res) {
+            success: function (res) {
                 if (res.data.ok === 1) {
                     let data = res.data.result
                     let smallImg = []
                     let bigImg = []
                     let joined = res.data.result.IncludeMe
-                    data.Imgs.forEach(function(item) {
+                    data.Imgs.forEach(function (item) {
                         smallImg = [...smallImg, 'https://weapp.fmcat.top/' + item.Thumb]
                         bigImg = [...bigImg, 'https://weapp.fmcat.top/' + item.Origin]
                     }, this);
@@ -116,7 +126,7 @@ Page({
                 orderId: id,
                 sessionId
             },
-            success: function(res) {
+            success: function (res) {
                 console.log(res);
                 that.setData({
                     goods: res.data.result
@@ -131,7 +141,7 @@ Page({
                 sessionId,
                 isManage: true
             },
-            success: function(res) {
+            success: function (res) {
                 console.log(res);
                 that.setData({
                     join: res.data.result
@@ -178,10 +188,11 @@ Page({
         that.setData({
             closeIng: true
         })
-        setTimeout(function() {
+        setTimeout(function () {
             that.setData({
                 closeIng: false,
-                slideOpen: false
+                slideOpen: false,
+                editChild: false
             })
         }, 200);
     },
@@ -232,12 +243,14 @@ Page({
         }
         wx.showActionSheet({
             itemList: list,
-            success: function(res) {
+            success: function (res) {
                 let selectName = list[res.tapIndex]
                 let funName = 'cancel'
                 let funList = {
                     out() {
-                        console.log('out');
+                        that.setData({
+                            outPopOpen: true
+                        })
                     },
                     edit() {
                         wx.navigateTo({
@@ -245,7 +258,7 @@ Page({
                         })
                     },
                     stop() {
-                        wx.showLoading('正在截止')
+                        wx.showLoading({title:'正在截止'})
                         wx.request({
                             url: url + '/Order/ChangeOrderStatus',
                             header: {
@@ -257,7 +270,7 @@ Page({
                                 orderId,
                                 status: 1
                             },
-                            success: function(res) {
+                            success: function (res) {
                                 console.log(res);
                                 if (res.data.ok === 1) {
                                     util.showSuccess('已截止')
@@ -272,7 +285,7 @@ Page({
                         })
                     },
                     start() {
-                        wx.showLoading('正在开启')
+                        wx.showLoading({title:'正在开启'})
                         wx.request({
                             url: url + '/Order/ChangeOrderStatus',
                             header: {
@@ -284,7 +297,7 @@ Page({
                                 orderId,
                                 status: 0
                             },
-                            success: function(res) {
+                            success: function (res) {
                                 console.log(res);
                                 if (res.data.ok === 1) {
                                     util.showSuccess('已开启')
@@ -316,7 +329,7 @@ Page({
                 }
                 funList[funName]()
             },
-            fail: function(res) {
+            fail: function (res) {
                 console.log(res.errMsg)
             }
         })
@@ -331,6 +344,10 @@ Page({
         let type = e.currentTarget.dataset.type
         let index = e.currentTarget.dataset.index
         let goods = that.data.goods
+        let editChild = that.data.editChild
+        if (editChild) {
+            goods = that.data.goodsArray
+        }
         if (type == 'add') {
             goods[index].MyOrderCount++
         } else {
@@ -339,17 +356,25 @@ Page({
             }
             goods[index].MyOrderCount--
         }
-        that.mySelectCount()
-        that.setData({
-            goods
-        })
+        if (!editChild) {
+            that.mySelectCount()
+            that.setData({
+                goods
+            })
+        } else {
+            that.childSelectCount()
+            that.setData({
+                goodsArray: goods
+            })
+        }
+
     },
     mySelectCount() {
         let selectCount = 0
         let moneyCount = 0
         let that = this
         let goods = that.data.goods
-        goods.forEach(function(item) {
+        goods.forEach(function (item) {
             selectCount += parseInt(item.MyOrderCount || 0)
             moneyCount += parseInt(item.MyOrderCount || 0) * parseFloat(item.Price)
         }, this);
@@ -358,16 +383,40 @@ Page({
             moneyCount: moneyCount.formatMoney(2, '')
         })
     },
+    childSelectCount() {
+        let childSelectCount = 0
+        let childMoneyCount = 0
+        let that = this
+        let goods = that.data.goodsArray
+        goods.forEach(function (item) {
+            childSelectCount += parseInt(item.MyOrderCount || 0)
+            childMoneyCount += parseInt(item.MyOrderCount || 0) * parseFloat(item.Price)
+        }, this);
+        that.setData({
+            childSelectCount,
+            childMoneyCount: childMoneyCount.formatMoney(2, '')
+        })
+    },
     inputCount(e) {
         let that = this
         let index = e.currentTarget.dataset.index
         let goods = that.data.goods
+        let editChild = that.data.editChild
+        if (editChild) {
+            goods = that.data.goodsArray
+        }
         goods[index].MyOrderCount = e.detail.value
-        that.mySelectCount()
-
-        that.setData({
-            goods
-        })
+        if (!editChild) {
+            that.mySelectCount()
+            that.setData({
+                goods
+            })
+        } else {
+            that.childSelectCount()
+            that.setData({
+                goodsArray: goods
+            })
+        }
     },
     inputCountBlur(e) {
         let that = this
@@ -394,16 +443,23 @@ Page({
             popInputValue: e.detail.value
         })
     },
+    popOut(e) {
+        this.setData({
+            popOutValue: e.detail.value
+        })
+    },
     popCancel() {
         let that = this
         this.setData({
             popInputValue: '',
+            popOutValue: '',
             closeIng: true
         })
-        setTimeout(function() {
+        setTimeout(function () {
             that.setData({
                 closeIng: false,
-                inputPopOpen: false
+                inputPopOpen: false,
+                outPopOpen: false
             })
         }, 300);
     },
@@ -424,7 +480,7 @@ Page({
                     orderId,
                     pwd
                 },
-                success: function(res) {
+                success: function (res) {
                     if (res.data.ok === 1) {
                         util.showSuccess('已接管')
                         that.getDetail()
@@ -436,21 +492,68 @@ Page({
             that.setData({
                 isNull: true
             })
-            setTimeout(function() {
+            setTimeout(function () {
                 that.setData({
                     isNull: false
                 })
             }, 500);
         }
     },
-    //打开输入框添加地区
+    popOutConfirm() {
+        let that = this
+        let email = that.data.popOutValue
+        let sessionId = wx.getStorageSync('sessionId')
+        let orderId = parseInt(that.data.id)
+        var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+        console.log(email, orderId);
+        if (!reg.test(email)) {
+            wx.showToast({
+                title: '邮箱格式错误',
+                image:'./icon-error.png',
+                duration: 2000
+            })
+            that.setData({
+                isNull: true
+            })
+            setTimeout(function () {
+                that.setData({
+                    isNull: false
+                })
+            }, 500);
+            return false
+        }
+        wx.showLoading({title:'正在导出！'});
+        wx.request({
+            url: url + '/Order/Report',
+            header: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            method: 'POST',
+            data: {
+                email,
+                orderId,
+                sessionId
+            },
+            success: function (res) {
+                if (res.data.ok === 1) {
+                    util.showSuccess('导出成功！')
+                }
+            }
+        })
+        that.popCancel()
+    },
     sendJoin() {
         let that = this
         let submitJoin = that.data.submitJoin
         let d = that.data.detail
         let goods = that.data.goods
+        let editChild = that.data.editChild
         let orderGoodsJson = []
-        goods.forEach(function(item) {
+        let api = '/Order/AddChild'
+        if (editChild) {
+            goods = that.data.goodsArray
+        }
+        goods.forEach(function (item) {
             if (parseInt(item.MyOrderCount) > 0) {
                 orderGoodsJson.push({
                     GoodsId: item.Id,
@@ -490,23 +593,32 @@ Page({
         submitJoin.orderGoodsJson = JSON.stringify(orderGoodsJson)
         submitJoin.orderId = parseInt(that.data.id)
         submitJoin.sessionId = wx.getStorageSync('sessionId')
-        console.log(submitJoin);
-        wx.showLoading('正在提交')
+        // console.log(submitJoin);
+        wx.showLoading({title:'正在提交'})
+        if (that.data.isChangeSend) {
+            submitJoin.childId = that.data.detail.MyId
+            api = '/Order/EditChild'
+        }
         wx.request({
-            url: url + '/Order/AddChild',
+            url: url + api,
             header: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             method: 'POST',
             data: submitJoin,
-            success: function(res) {
+            success: function (res) {
                 if (res.data.ok === 1) {
                     util.showSuccess('提交成功')
                     that.closeSlide()
                     that.getDetail()
+                    that.setData({
+                        editChild: false,
+                        isChangeSend: false,
+                        joined: true
+                    })
                 }
             },
-            fail: function(res) {
+            fail: function (res) {
                 util.showModel('提示', '出现了错误，请稍后重试')
             }
         })
@@ -518,25 +630,122 @@ Page({
             isChange: true
         })
     },
-    changeJoin() {
+    changeJoin(itemData) {
         let that = this
         let data = that.data.detail
         let submitJoin = that.data.submitJoin
-        let selectRegion = ''
+        let selectRegion = -1
+        let selectHeadName = -1
         if (that.data.Regions) {
             selectRegion = that.data.Regions.indexOf(data.MyRegion)
             if (selectRegion == -1) {
                 selectRegion = 0
             }
         }
+        if (data.MyShowHeadNick) {
+            selectHeadName = 0
+        } else {
+            selectHeadName = 1
+        }
         submitJoin.realname = data.MyName
         submitJoin.phone = data.MyPhone
         submitJoin.weixin = data.MyWeixin
         submitJoin.region = data.MyRegion
+        submitJoin.memo = data.MyMemo
         that.setData({
             slideOpen: true,
             submitJoin,
-            selectRegion
+            selectRegion,
+            isChange: false,
+            isChangeSend: true,
+            selectHeadName
+        })
+    },
+    adminChangeJoin(e) {
+        let that = this
+        let item, childGood, itemIndex = e.target.dataset.itemindex.toString();
+        let goods = that.data.goods
+        let goodsOut = {},
+            goodsArray = []
+        if (that.data.detail.MyRole != 2 && that.data.detail.MyRole != 3) {
+            return false
+        }
+        if (itemIndex) {
+            item = that.data.join[itemIndex]
+            childGood = item.GoodsList
+        }
+        goods.forEach(item => {
+            item.MyOrderCount = 0
+            goodsOut[item.Id] = item
+        })
+        childGood.forEach(item => {
+            goodsOut[item.GoodsId].MyOrderCount = item.Count
+        });
+        for (var i in goodsOut) {
+            goodsArray.push(goodsOut[i])
+        }
+        that.setData({
+            childGoodPop: true,
+            childItem: item,
+            goodsArray,
+            editChild: true
+        })
+    },
+    closePop() {
+        let that = this
+        let item = that.data.childItem,
+            changeData = {}
+        changeData.MyName = item.Name
+        changeData.MyPhone = item.Phone
+        changeData.MyRegion = item.Region
+        changeData.MyShowHeadNick = item.ShowHeadNick
+        changeData.MyWeixin = item.Weixin
+        changeData.MyMemo = item.ConsumerMemo
+        that.setData({
+            closeIng: true
+        })
+        setTimeout(function () {
+            that.setData({
+                closeIng: false,
+                childGoodPop: false,
+                isChangeSend: true,
+                isChange: false
+            })
+            that.changeJoin(changeData)
+        }, 300);
+    },
+    examineJoin(e) {
+        let post = {
+            childId: e.target.dataset.id
+        }
+        let that = this
+        post.sessionId = wx.getStorageSync('sessionId')
+        wx.showActionSheet({
+            itemList: ['不通过', '通过'],
+            success: function (res) {
+                post.status = res.tapIndex
+                wx.showLoading({title:'正在提交'})
+                wx.request({
+                    url: url + '/order/ChildConfirm',
+                    header: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    method: 'POST',
+                    data: post,
+                    success: function (res) {
+                        if (res.data.ok === 1) {
+                            util.showSuccess('操作成功！')
+                            that.getDetail()
+                        }
+                    },
+                    fail: function (res) {
+                        util.showModel('提示', '出现了错误，请稍后重试')
+                    }
+                })
+            },
+            fail: function (res) {
+                console.log(res.errMsg)
+            }
         })
     }
 })

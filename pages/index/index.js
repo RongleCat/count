@@ -11,6 +11,7 @@ Page({
         list: [],
         page: 0,
         status: ['接龙中', '已截止', '已确认'],
+        joinStatus: ['待审核', '未通过', '已通过'],
         isLoading: false,
         isNoData: false
     },

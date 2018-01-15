@@ -4,12 +4,12 @@
   z-index: 10;
   padding-bottom: 90rpx;
   position: relative;
+  box-sizing: border-box;
 }
-.page,
-.page view,
-.page block,
-.page scroll-view,
-.page image {
+view,
+block,
+scroll-view,
+image {
   box-sizing: border-box;
 }
 .bottom-bar {
@@ -388,6 +388,9 @@
   padding-bottom: 19rpx;
   border-bottom: 1rpx solid #ccc;
 }
+.content-title span {
+  float: right;
+}
 .no-join {
   text-align: center;
   line-height: 200rpx;
@@ -428,6 +431,38 @@
   font-size: 26rpx;
   line-height: 36rpx;
   color: #666;
+}
+.join-item .btn-examine {
+  width: 100rpx;
+  height: 50rpx;
+  position: absolute;
+  bottom: 10rpx;
+  right: 0rpx;
+  font-size: 24rpx;
+  text-align: center;
+  line-height: 50rpx;
+  color: #fff;
+  background: #09f;
+  border-radius: 10rpx;
+}
+.join-item .join-state {
+  width: 100rpx;
+  height: 50rpx;
+  position: absolute;
+  bottom: 10rpx;
+  right: 0rpx;
+  font-size: 24rpx;
+  text-align: center;
+  line-height: 50rpx;
+  color: #fff;
+  background: #09f;
+  border-radius: 10rpx;
+}
+.join-item .join-state.ok {
+  background: #33CC00;
+}
+.join-item .join-state.no {
+  background: #f00;
 }
 .pop-input {
   position: fixed;
@@ -496,6 +531,80 @@
 }
 .pop-input-main .pop-btn-box view:active {
   background: #ebebeb;
+}
+.pop-container,
+.pop-input {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+}
+.pop-main {
+  padding: 20rpx;
+  padding-top: 0;
+  width: 650rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  position: absolute;
+  top: 20%;
+  left: 50rpx;
+  z-index: 10;
+  box-shadow: 0 0 40rpx rgba(0, 0, 0, 0.1);
+  transform: scale(2);
+  animation: maxtomin 0.1s forwards ease-out;
+  opacity: 0;
+}
+.pop-main .pop-title {
+  text-align: center;
+  line-height: 80rpx;
+  font-size: 30rpx;
+}
+.pop-main.close {
+  transform: scale(1);
+  opacity: 1;
+  animation: closeMaskLayer 0.2s forwards ease-out;
+}
+.pop-content {
+  font-size: 26rpx;
+  max-height: 600rpx;
+  overflow-y: auto;
+}
+.pop-content .font-red {
+  color: #db0000;
+}
+.pop-close {
+  position: absolute;
+  bottom: -120rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70rpx;
+  height: 70rpx;
+  border-radius: 50%;
+  border: 2rpx solid #fff;
+}
+.pop-close:before {
+  position: absolute;
+  top: 24%;
+  left: 60%;
+  content: '';
+  width: 2rpx;
+  height: 40rpx;
+  background: #fff;
+  transform: rotate(45deg);
+}
+.pop-close:after {
+  position: absolute;
+  top: 49%;
+  left: 29%;
+  content: '';
+  width: 2rpx;
+  height: 20rpx;
+  background: #fff;
+  transform: rotate(-45deg);
 }
 .pop-mask {
   position: absolute;
