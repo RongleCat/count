@@ -528,7 +528,7 @@ Page({
             header: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            method: 'POST',
+            method: 'GET',
             data: {
                 email,
                 orderId,
@@ -537,6 +537,12 @@ Page({
             success: function (res) {
                 if (res.data.ok === 1) {
                     util.showSuccess('导出成功！')
+                }else{
+                    wx.showToast({
+                        title: res.data.msg,
+                        image:'./icon-error.png',
+                        duration: 2000
+                    })
                 }
             }
         })
