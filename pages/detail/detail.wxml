@@ -51,8 +51,8 @@
             </view>
             <view class="join-list-container">
                 <view class="join-item" wx:for="{{join}}" wx:key="{{index}}">
-                    <image src="{{item.HeadImg?item.HeadImg:'./user.png'}}" data-itemIndex="{{index}}" bindtap="adminChangeJoin" />
-                    <view class="nickname-box">{{item.NickName}}</view>
+                    <image src="{{item.HeadImg&&item.ShowHeadNick?item.HeadImg:'./user.png'}}" data-itemIndex="{{index}}" bindtap="adminChangeJoin" />
+                    <view class="nickname-box">{{item.ShowHeadNick?item.NickName:'***'}}</view>
                     <view class="join-time">{{item.PartakTime}}</view>
                     <view class="goods-list">
                         <view wx:for="{{item.GoodsList}}" wx:for-item="good" wx:key="{{index}}">{{good.GoodsName}}×{{good.Count}}</view>

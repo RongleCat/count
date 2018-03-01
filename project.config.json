@@ -8,8 +8,8 @@
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "1.5.4",
-	"appid": "wx415c001d6594bae2",
+	"libVersion": "1.9.1",
+	"appid": "wxdf8012695fd114ca",
 	"projectname": "count",
 	"condition": {
 		"search": {
@@ -25,13 +25,13 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 2,
+			"current": 4,
 			"list": [
 				{
 					"id": 0,
 					"name": "create",
 					"pathName": "pages/create/create",
-					"query": "type=copy"
+					"query": ""
 				},
 				{
 					"id": -1,
