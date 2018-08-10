@@ -603,7 +603,7 @@ Page({
             endtime: d.endDate + ' ' + d.endTime,
             endcount: d.endcount,
             region: d.region,
-            regionnames: d.regionname.join(','),
+            regionnames: d.regionname?d.regionname.join(','):'',
             adminpwd: d.password.adminpwd,
             managepwd: d.password.managepwd,
             hideprice: d.hideprice,
